@@ -14,6 +14,7 @@ clients {
 	BOOL confirmed "BOOL NOT NULL DEFAULT FALSE"
 	BLOB image "BLOB"
 	TEXT names "TEXT NOT NULL"
+	TEXT username "TEXT NOT NULL UNIQUE"
 	TEXT password_salt "TEXT NOT NULL"
 	TEXT password_hash "TEXT NOT NULL"
 }
@@ -29,6 +30,7 @@ stores {
 	TEXT name "TEXT NOT NULL"
 	DOUBLE rating "DOUBLE NOT NULL DEFAULT 0.0"
 	TEXT address "TEXT NOT NULL"
+	TEXT username "TEXT NOT NULL UNIQUE"
 	TEXT password_salt "TEXT NOT NULL"
 	TEXT password_hash "TEXT NOT NULL"
 }
