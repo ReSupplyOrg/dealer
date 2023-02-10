@@ -1,0 +1,656 @@
+openapi: 3.0.3
+info:
+  title: Dealer
+  description: |-
+    Documentation for the [dealer](https://github.com/ReSupplyOrg/dealer) API.
+
+  license:
+    name: All rights reserved
+  version: TBA
+tags:
+  - name: Stores
+    description: API routes used by stores
+  - name: Clients
+    description: API routes used by store clients
+  - name: Everyone
+    description: Operations that any user can make
+paths:
+  # Clients
+  /clients/login:
+    post:
+      description: Client authentication
+      tags:
+        - Clients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/login-form"
+      responses:
+        "200":
+          description: Session Token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/session-token"
+        "401":
+          description: Unauthorized
+  /clients/register:
+    put:
+      description: Register a new account
+      tags:
+        - Clients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/registration-form"
+      responses:
+        "200":
+          description: Account registered
+        "401":
+          description: Unauthorized
+  /clients/confirm/phone:
+    post:
+      description: Request phone number confirmation
+      security:
+        - sessionHeader: []
+      tags:
+        - Clients
+      responses:
+        "200":
+          description: Confirm code sent
+        "401":
+          description: Unauthorized
+  /clients/confirm/phone/{code}:
+    put:
+      description: Confirm registered phone number
+      tags:
+        - Clients
+      parameters:
+        - in: path
+          name: code
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Account confirmed
+        "401":
+          description: Unauthorized
+  /clients/account:
+    get:
+      description: Query account details
+      security:
+        - sessionHeader: []
+      tags:
+        - Clients
+      responses:
+        "200":
+          description: Account details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        "401":
+          description: Unauthorized
+    patch:
+      description: Update account details
+      security:
+        - sessionHeader: []
+      tags:
+        - Clients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/account-update"
+      responses:
+        "200":
+          description: Account details updated
+        "401":
+          description: Unauthorized
+  /clients/buy:
+    post:
+      description: Buy a pack
+      security:
+        - sessionHeader: []
+      tags:
+        - Clients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uuid:
+                  type: string
+      responses:
+        "200":
+          description: Order code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+        "401":
+          description: Unauthorized
+  # Stores
+  /stores/login:
+    post:
+      description: Stores authentication
+      tags:
+        - Stores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/login-form"
+      responses:
+        "200":
+          description: Session Token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/session-token"
+        "401":
+          description: Unauthorized
+  /stores/register:
+    put:
+      description: Register a new store
+      tags:
+        - Stores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/store-registration-form"
+      responses:
+        "200":
+          description: Account registered
+        "401":
+          description: Unauthorized
+  /stores/confirm/phone:
+    post:
+      description: Request phone number confirmation
+      security:
+        - sessionHeader: []
+      tags:
+        - Stores
+      responses:
+        "200":
+          description: Confirm code sent
+        "401":
+          description: Unauthorized
+  /stores/confirm/phone/{code}:
+    put:
+      description: Confirm registered phone number
+      tags:
+        - Stores
+      parameters:
+        - in: path
+          name: code
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Account confirmed
+        "401":
+          description: Unauthorized
+  /stores/account:
+    get:
+      description: Query account details
+      security:
+        - sessionHeader: []
+      tags:
+        - Stores
+      responses:
+        "200":
+          description: Account details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/store-account"
+        "401":
+          description: Unauthorized
+    patch:
+      description: Update account details
+      security:
+        - sessionHeader: []
+      tags:
+        - Stores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/store-account-update"
+      responses:
+        "200":
+          description: Account details updated
+        "401":
+          description: Unauthorized
+  /stores/complete/order/{code}:
+    post:
+      description: Complete order
+      security:
+        - sessionHeader: []
+      tags:
+        - Stores
+      parameters:
+        - in: path
+          name: code
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order completed
+        "401":
+          description: Unauthorized
+  /stores/packs:
+    put:
+      description: Creates a new pack
+      security:
+        - sessionHeader: []
+      tags:
+        - Stores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/pack-form"
+      responses:
+        "200":
+          description: Pack created
+        "401":
+          description: Unauthorized
+  /stores/packs/{uuid}:
+    delete:
+      description: Deletes the pack
+      security:
+        - sessionHeader: []
+      tags:
+        - Stores
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Pack deleted
+        "401":
+          description: Unauthorized
+    patch:
+      description: Updated the pack
+      security:
+        - sessionHeader: []
+      tags:
+        - Stores
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/pack-form"
+      responses:
+        "200":
+          description: Pack updated
+        "401":
+          description: Unauthorized
+
+  # Everyone
+  /orders/{uuid}:
+    delete:
+      description: Cancels an order
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: order canceled
+        "401":
+          description: unauthorized
+  /search/orders:
+    post:
+      description: Query for account orders
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ordersFilter"
+      responses:
+        "200":
+          description: Stores
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalPages:
+                    type: number
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/order"
+        "401":
+          description: Unauthorized
+  /search/packs:
+    post:
+      description: Query for packs
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/packsFilter"
+      responses:
+        "200":
+          description: Packs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalPages:
+                    type: number
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/pack"
+        "401":
+          description: Unauthorized
+  /search/stores:
+    post:
+      description: Query for stores
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/storesFilter"
+      responses:
+        "200":
+          description: Stores
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalPages:
+                    type: number
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/store"
+        "401":
+          description: Unauthorized
+  /images/pack/{uuid}:
+    get:
+      description: Download image of pack
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Image Bytes
+        "401":
+          description: Unauthorized
+  /images/store/{uuid}:
+    get:
+      description: Download image of store
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Image Bytes
+        "401":
+          description: Unauthorized
+  /images/account/{uuid}:
+    get:
+      description: Download image of client
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Image Bytes
+        "401":
+          description: Unauthorized
+components:
+  securitySchemes:
+    sessionHeader:
+      type: http
+      scheme: bearer
+  schemas:
+    pack-form:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        stock:
+          type: number
+        price:
+          type: number
+        type:
+          type: string
+          enum: ["vegetales", "fritanga", "..."]
+    order:
+      type: object
+      properties:
+        buyer:
+          type: string
+        store:
+          type: string
+        pack:
+          type: string
+        status:
+          type: string
+          enum:
+            ["pending", "canceled by client", "canceled by store", "completed"]
+        price:
+          type: number
+    ordersFilter:
+      type: object
+      properties:
+        buyer:
+          type: string
+        store:
+          type: string
+        pack:
+          type: string
+        status:
+          type: string
+          enum:
+            ["pending", "canceled by client", "canceled by store", "completed"]
+        price:
+          type: number
+        page:
+          type: number
+    store-account:
+      allOf:
+        - $ref: "#/components/schemas/account"
+        - type: object
+          properties:
+            address:
+              type: string
+    store-account-update:
+      allOf:
+        - $ref: "#/components/schemas/account-update"
+        - type: object
+          properties:
+            address:
+              type: string
+    packsFilter:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        owner:
+          type: string
+        stock:
+          type: number
+        price:
+          type: number
+        type:
+          type: string
+          enum: ["vegetales", "fritanga", "..."]
+        page:
+          type: number
+    pack:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        owner:
+          type: string
+        stock:
+          type: number
+        price:
+          type: number
+        type:
+          type: string
+          enum: ["vegetales", "fritanga", "..."]
+    store:
+      type: object
+      properties:
+        name:
+          type: string
+        confirmed:
+          type: boolean
+        phone:
+          type: string
+        rating:
+          type: number
+        address:
+          type: string
+        username:
+          type: string
+    storesFilter:
+      type: object
+      properties:
+        name:
+          type: string
+        confirmed:
+          type: boolean
+        phone:
+          type: string
+        rating:
+          type: number
+        address:
+          type: string
+        username:
+          type: string
+        page:
+          type: number
+    login-form:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    session-token:
+      type: object
+      properties:
+        token:
+          type: string
+    registration-form:
+      type: object
+      properties:
+        phone:
+          type: string
+        image:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+    account:
+      type: object
+      properties:
+        uuid:
+          type: string
+        phone:
+          type: string
+        confirmed:
+          type: boolean
+        username:
+          type: string
+        names:
+          type: string
+    account-update:
+      type: object
+      properties:
+        image:
+          type: string
+        phone:
+          type: string
+        names:
+          type: string
+        password:
+          type: string
+    store-registration-form:
+      allOf:
+        - $ref: "#/components/schemas/registration-form"
+        - type: object
+          properties:
+            address:
+              type: string
