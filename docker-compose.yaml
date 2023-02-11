@@ -25,10 +25,11 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
-      - type: bind
-        source: ./docker-entrypoint-initdb.d
-        target: /docker-entrypoint-initdb.d
-        read_only: true
+      # Django handles everything for us, no database management required
+      # - type: bind
+      #   source: ./docker-entrypoint-initdb.d
+      #   target: /docker-entrypoint-initdb.d
+      #   read_only: true
       - ./postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: dealer
