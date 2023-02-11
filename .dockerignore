@@ -2,3 +2,4 @@ venv
 .idea
 .github
 docs
+postgres-data
