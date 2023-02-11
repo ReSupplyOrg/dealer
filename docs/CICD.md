@@ -22,8 +22,7 @@ stateDiagram-v2
 	state release_state <<join>>
 	Releases --> release_state
 	Packages --> release_state
-	release_state --> Deploy_webhook
-	Deploy_webhook --> [*]
+	release_state --> [*]
 ```
 
 ### Coverage
@@ -47,9 +46,9 @@ stateDiagram-v2
 
 ## Continuous delivery
 
-| Permissions | Triggers                               |
-| ----------- | -------------------------------------- |
-| Read only   | Package created (triggered by webhook) |
+| Permissions | Triggers                   |
+| ----------- | -------------------------- |
+| Read only   | Registry package published |
 
 ```mermaid
 stateDiagram-v2
