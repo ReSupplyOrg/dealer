@@ -175,7 +175,7 @@ BEGIN
 END
 $$;
 CREATE OR REPLACE PROCEDURE stores_update_password(
-    uuid_v UUID, password_v TEXT
+    uuid_v UUID, old_password_v TEXT, new_password_v TEXT
 )
     LANGUAGE 'plpgsql' AS
 $$
@@ -185,7 +185,8 @@ BEGIN
     salt_v = gen_salt('md5');
     UPDATE stores
     SET password_salt = salt_v,
-        password_hash = crypt(password_v, salt_v)
-    WHERE uuid = uuid_v;
+        password_hash = crypt(new_password_v, salt_v)
+    WHERE uuid = uuid_v
+      AND password_hash = crypt(old_password_v, password_salt);
 END
 $$;
