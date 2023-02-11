@@ -1,0 +1,36 @@
+# This docker compose will be used by API developers since it
+# only starts the Databases and expose their ports
+
+version: "3.3"
+
+networks:
+  deaeler:
+    external: false
+
+services:
+  redis:
+    networks:
+      - deaeler
+    container_name: deaeler-redis
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+  postgres:
+    networks:
+      - deaeler
+    container_name: dealer-postgres
+    restart: unless-stopped
+    image: postgres:latest
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - type: bind
+        source: ./docker-entrypoint-initdb.d
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: dealer
+      POSTGRES_USER: dealer
+      POSTGRES_PASSWORD: dealer
