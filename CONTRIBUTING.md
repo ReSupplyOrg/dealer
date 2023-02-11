@@ -28,7 +28,7 @@ Commits messages should always be descriptive. Meaning technical descriptions wi
 | `docs:`              | The commit includes documentation update.                    |
 | `feat:`              | The commit includes new features to the project.             |
 | `fix:`               | The commit includes fixes for existing bugs.                 |
-| `[skip sci] PREFIX:` | Reserved for CI/CD pipelines. Should never be used by a human. |
+| `[skip ci] PREFIX:`  | Reserved for CI/CD pipelines. Should never be used by a human. |
 
 Commits should only contain changes related to the prefix used, for example: Never commit `feat` files with `docs` files.
 
