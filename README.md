@@ -3,11 +3,11 @@ Dealer is the backend for the ReSupply application
 
 ## Documentation
 
-| Document                             | Description                                             |
-| ------------------------------------ | ------------------------------------------------------- |
-| [docs/Database.md](docs/Database.md) | Database documentation including schemas and procedures |
-|                                      |                                                         |
-|                                      |                                                         |
+| Document                             | Description                                                  |
+| ------------------------------------ | ------------------------------------------------------------ |
+| [docs/Database.md](docs/Database.md) | Database documentation including schemas, triggers and procedures |
+|                                      |                                                              |
+|                                      |                                                              |
 
 ## Development
 
