@@ -11,7 +11,7 @@ class Clients(models.Model):
     modification = models.DateTimeField(auto_now=True)
     deletion = models.DateTimeField(auto_now=True)
     phone = models.TextField()
-    confirmed = models.BooleanField()
+    confirmed = models.BooleanField(default=False)
     image_bytes = models.BinaryField(null=True)
     names = models.TextField()
     username = models.TextField()
