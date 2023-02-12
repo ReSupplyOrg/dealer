@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.5 (2023-02-12)
+
+
+### Bug Fixes
+
+* added support for custom GitHub token ([e5ba435](https://github.com/ReSupplyOrg/dealer/commit/e5ba435a8d63087d8836431760b30997fd2eea97))
+
 ### 0.0.4 (2023-02-12)
 
 
