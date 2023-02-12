@@ -32,7 +32,7 @@ jobs:
         run: python backend/manage.py test
 
   versioning:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.latest_version.outputs.version }}
