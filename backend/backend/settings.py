@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY") if "SECRET_KEY" in env else "testing-testing"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -77,30 +77,46 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env("POSTGRES_DATABASE"),
-        'USER': env("POSTGRES_USERNAME"),
-        'PASSWORD': env("POSTGRES_PASSWORD"),
-        'HOST': env("POSTGRES_HOST"),
-        'PORT': env("POSTGRES_PORT"),
+if "POSTGRES_DATABASE" in env:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env("POSTGRES_DATABASE"),
+            'USER': env("POSTGRES_USERNAME"),
+            'PASSWORD': env("POSTGRES_PASSWORD"),
+            'HOST': env("POSTGRES_HOST"),
+            'PORT': env("POSTGRES_PORT"),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    }
 
 # Setup redis
-redis_hosts = [env("REDIS_LEADER")]
-redis_worker = 1
-while f"REDIS_WORKER_{redis_worker}" in env:
-    redis_hosts.append(env(f"REDIS_WORKER_{redis_worker}"))
-    redis_worker += 1
+if "REDIS_LEADER" in env:
+    redis_hosts = [env("REDIS_LEADER")]
+    redis_worker = 1
+    while f"REDIS_WORKER_{redis_worker}" in env:
+        redis_hosts.append(env(f"REDIS_WORKER_{redis_worker}"))
+        redis_worker += 1
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': redis_hosts,
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': redis_hosts,
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake',
+        }
+    }
 
 
 # Password validation
