@@ -10,9 +10,8 @@ jobs:
   deploy_:
     runs-on: kube-master
     steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.PACKAGES_WRITE_PERMISSION }}
-          repository: ReSupplyOrg/infrastructure
       - name: Deploy to kubernetes cluster
-        run: KUBECONFIG=/opt/runner/kubeconfig.yaml kubectl -n resupply apply dealer/deployment.yaml
+        run: kubectl -n resupply rollout restart deployment/dealer-deployment
+        env:
+          KUBECONFIG: /opt/runner/kubeconfig.yaml
+
