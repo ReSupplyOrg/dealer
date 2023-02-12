@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.9 (2023-02-12)
+
+
+### Features
+
+* production env ([93098f9](https://github.com/ReSupplyOrg/dealer/commit/93098f9f94284a148bc3143c87e18149c1fc3452))
+
 ### 0.0.8 (2023-02-12)
 
 
