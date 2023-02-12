@@ -29,7 +29,7 @@ SECRET_KEY = env("SECRET_KEY") if "SECRET_KEY" in env else "testing-testing"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
