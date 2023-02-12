@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +91,7 @@ if "POSTGRES_DATABASE" in env:
             'PORT': env("POSTGRES_PORT"),
         }
     }
+    print(DATABASES)
 else:
     DATABASES = {
         'default': {
