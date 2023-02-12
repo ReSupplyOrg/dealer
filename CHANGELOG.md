@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.7 (2023-02-12)
+
+
+### Bug Fixes
+
+* repository name and PAT ([a34c20e](https://github.com/ReSupplyOrg/dealer/commit/a34c20e20aa4af75e24586ff395c3a7b2a4579b5))
+
 ### 0.0.6 (2023-02-12)
 
 
