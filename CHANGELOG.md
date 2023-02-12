@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.8 (2023-02-12)
+
+
+### Bug Fixes
+
+* kubeconfig rollout ([d62b227](https://github.com/ReSupplyOrg/dealer/commit/d62b2273fea8ef1f6a8fd980bddbce41741c1609))
+
 ### 0.0.7 (2023-02-12)
 
 
