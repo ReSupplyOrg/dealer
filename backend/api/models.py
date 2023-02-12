@@ -20,7 +20,7 @@ class Clients(models.Model):
     
 
     def __str__(self):
-        return "" +self.phone, self.username, self.names+""
+        return '{} {} {} {} {}'.format(self.uuid, self.phone, self.username, self.names, self.password_hash)
 
 class Stores(models.Model):
     uuid = models.UUIDField(
@@ -41,7 +41,7 @@ class Stores(models.Model):
     password_hash = models.TextField()
 
     def __str__(self):
-        return "" +self.phone, self.username, self.name, self.address+""
+        return '{} {} {} {} {} {}'.format(self.uuid, self.phone, self.username, self.name, self.address, self.password_hash)
 
 
 class Ratings(models.Model):
@@ -51,6 +51,9 @@ class Ratings(models.Model):
     client_uuid = models.ForeignKey(Clients, on_delete=models.CASCADE)
     store_uuid = models.ForeignKey(Stores, on_delete=models.CASCADE)
     rating = models.FloatField()
+
+    def __str__(self):
+        return '{} {} {}'.format(self.client_uuid, self.store_uuid, self.rating)
 
 class Packs(models.Model):
     uuid = models.UUIDField(
@@ -73,6 +76,9 @@ class Packs(models.Model):
 
     description = models.TextField()
 
+    def __str__(self):
+        return '{} {} {} {} {} {}'.format(self.uuid, self.owner, self.stock, self.price, self.name, self.description)
+
 class Orders(models.Model):
     uuid = models.UUIDField(
          primary_key = True,
@@ -89,3 +95,6 @@ class Orders(models.Model):
         canceled = 'canceled'
         completed = 'completed'
     payed_price = models.IntegerField()
+
+    def __str__(self):
+        return '{} {} {} {} {}'.format(self.uuid, self.client_uuid, self.store_uuid, self.pack_uuid, self.payed_price)

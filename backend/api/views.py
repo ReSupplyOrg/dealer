@@ -15,8 +15,9 @@ def storeRegister(request):
     hash = bcrypt.hashpw(bytes, salt)
     Stores.objects.create(
         phone = data["phone"],
-        image_bytes = base64.b64encode(data["image"]),
-        username = data["username"],
+        #image_bytes = base64.b64encode(data["image"]),
+        name = data["username"],
+        username = data["name"],
         password_hash = hash,
         password_salt = salt,
         address = data["address"],
