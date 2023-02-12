@@ -49,6 +49,7 @@ jobs:
           git fetch --all --tags
           git config --global user.email "antoniojosedonishung@gmail.com"
           git config --global user.name "Antonio Donis"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
       - name: Changelog
         run: 'npx standard-version --message "[ci skip] chore(release): %s"'
 
@@ -96,5 +97,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/ReSupplyOrg/dealer:latest,ghcr.io/ReSupplyOrg/dealer:${{needs.versioning.outputs.version}}
+          tags: ghcr.io/$GITHUB_REPOSITORY:latest,ghcr.io/$GITHUB_REPOSITORY:${{needs.versioning.outputs.version}}
           labels: ${{ steps.meta.outputs.labels }}
