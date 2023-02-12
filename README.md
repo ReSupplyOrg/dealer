@@ -1,4 +1,9 @@
 # dealer
+
+[![Build](https://github.com/ReSupplyOrg/dealer/actions/workflows/build.yaml/badge.svg)](https://github.com/ReSupplyOrg/dealer/actions/workflows/build.yaml)
+
+[![Deploy](https://github.com/ReSupplyOrg/dealer/actions/workflows/deploy.yaml/badge.svg)](https://github.com/ReSupplyOrg/dealer/actions/workflows/deploy.yaml)
+
 Dealer is the backend for the ReSupply application
 
 ## Contributing
