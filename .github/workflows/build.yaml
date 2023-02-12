@@ -32,6 +32,7 @@ jobs:
         run: python backend/manage.py test
 
   versioning:
+    permissions: write-all
     needs: test
     runs-on: ubuntu-latest
     outputs:
@@ -45,7 +46,6 @@ jobs:
 
       - name: Git Identity
         run: |
-          git config --list
           git checkout main
           git fetch --all --tags
           git config --global user.email "antoniojosedonishung@gmail.com"
@@ -61,6 +61,7 @@ jobs:
         run: python version.py >> $GITHUB_OUTPUT
 
   release-github:
+    permissions: write-all
     needs:
       - versioning
     runs-on: ubuntu-latest
@@ -73,6 +74,7 @@ jobs:
           tag_name: v${{needs.versioning.outputs.version}}
 
   release-docker:
+    permissions: write-all
     needs:
       - versioning
     runs-on: ubuntu-latest
