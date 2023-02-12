@@ -12,6 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: 'https://github.com/ReSupplyOrg/Infrastructure'
+          repository: 'ReSupplyOrg/Infrastructure'
       - name: Deploy to kubernetes cluster
         run: KUBECONFIG=/opt/runner/kubeconfig.yaml kubectl -n resupply apply dealer/deployment.yaml
