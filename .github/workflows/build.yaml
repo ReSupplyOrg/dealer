@@ -49,7 +49,6 @@ jobs:
           git fetch --all --tags
           git config --global user.email "antoniojosedonishung@gmail.com"
           git config --global user.name "Antonio Donis"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
       - name: Changelog
         run: 'npx standard-version --message "[ci skip] chore(release): %s"'
 
