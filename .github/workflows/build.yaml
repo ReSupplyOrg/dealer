@@ -99,5 +99,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/ReSupplyOrg/dealer:latest,ghcr.io/ReSupplyOrg/dealer:${{needs.versioning.outputs.version}}
+          tags: ghcr.io/resupplyorg/dealer:latest,ghcr.io/resupplyorg/dealer:${{needs.versioning.outputs.version}}
           labels: ${{ steps.meta.outputs.labels }}
