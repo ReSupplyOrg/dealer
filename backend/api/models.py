@@ -12,11 +12,11 @@ class Clients(models.Model):
     deletion = models.DateTimeField(auto_now=True)
     phone = models.TextField()
     confirmed = models.BooleanField(default=False)
-    image_bytes = models.BinaryField(null=True)
+    image_bytes = models.ImageField(null=True)
     names = models.TextField()
     username = models.TextField()
-    password_salt =  models.TextField()
-    password_hash = models.TextField()
+    password_salt =  models.BinaryField()
+    password_hash = models.BinaryField()
     
 
     def __str__(self):
@@ -32,13 +32,13 @@ class Stores(models.Model):
     deletion = models.DateTimeField(auto_now=True)
     phone = models.TextField()
     confirmed = models.BooleanField(default=False)
-    image_bytes = models.BinaryField(null=True)
+    image_bytes = models.ImageField(null=True)
     name = models.TextField()
     rating = models.FloatField(default=0)
     address = models.TextField()
     username = models.TextField()
-    password_salt =  models.TextField()
-    password_hash = models.TextField()
+    password_salt =  models.BinaryField()
+    password_hash = models.BinaryField()
 
     def __str__(self):
         return '{} {} {} {} {} {}'.format(self.uuid, self.phone, self.username, self.name, self.address, self.password_hash)
