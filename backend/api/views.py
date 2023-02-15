@@ -6,6 +6,10 @@ from .models import Stores, Clients
 import bcrypt
 import base64
 
+@api_view(["GET"])
+def echo(request):
+    return Response("ECHO")
+
 # Create your views here.
 # Stores methods
 @api_view(['PUT'])
