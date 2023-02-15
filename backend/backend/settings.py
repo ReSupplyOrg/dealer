@@ -91,7 +91,6 @@ if "POSTGRES_DATABASE" in env:
             'PORT': env("POSTGRES_PORT"),
         }
     }
-    print(DATABASES)
 else:
     DATABASES = {
         'default': {
