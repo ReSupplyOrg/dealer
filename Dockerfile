@@ -7,6 +7,7 @@ COPY . .
 RUN pip3 install -r requirements.txt
 RUN chmod 777 run.sh
 
+ENV PRODUCTION true
 ENV SECRET_KEY dealer
 ENV POSTGRES_DATABASE dealer
 ENV POSTGRES_USERNAME dealer

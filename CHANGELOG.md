@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.10 (2023-02-12)
+
+### 0.0.9 (2023-02-12)
+
+
+### Features
+
+* production env ([93098f9](https://github.com/ReSupplyOrg/dealer/commit/93098f9f94284a148bc3143c87e18149c1fc3452))
+
+### 0.0.8 (2023-02-12)
+
+
+### Bug Fixes
+
+* kubeconfig rollout ([d62b227](https://github.com/ReSupplyOrg/dealer/commit/d62b2273fea8ef1f6a8fd980bddbce41741c1609))
+
+### 0.0.7 (2023-02-12)
+
+
+### Bug Fixes
+
+* repository name and PAT ([a34c20e](https://github.com/ReSupplyOrg/dealer/commit/a34c20e20aa4af75e24586ff395c3a7b2a4579b5))
+
+### 0.0.6 (2023-02-12)
+
+
+### Bug Fixes
+
+* repository name ([73bc90e](https://github.com/ReSupplyOrg/dealer/commit/73bc90e98c9e9921488fe6ea105c36140afb03d5))
+
+### 0.0.5 (2023-02-12)
+
+
+### Bug Fixes
+
+* added support for custom GitHub token ([e5ba435](https://github.com/ReSupplyOrg/dealer/commit/e5ba435a8d63087d8836431760b30997fd2eea97))
+
+### 0.0.4 (2023-02-12)
+
+
+### Bug Fixes
+
+* added domain allowed hosts ([9ba4536](https://github.com/ReSupplyOrg/dealer/commit/9ba4536490150f53654efefbcd60e879897754cd))
+
 ### 0.0.3 (2023-02-12)
 
 

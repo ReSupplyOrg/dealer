@@ -1,4 +1,8 @@
 # dealer
+
+[![Build](https://github.com/ReSupplyOrg/dealer/actions/workflows/build.yaml/badge.svg)](https://github.com/ReSupplyOrg/dealer/actions/workflows/build.yaml)
+[![Deploy](https://github.com/ReSupplyOrg/dealer/actions/workflows/deploy.yaml/badge.svg)](https://github.com/ReSupplyOrg/dealer/actions/workflows/deploy.yaml)
+
 Dealer is the backend for the ReSupply application
 
 ## Contributing
@@ -11,9 +15,25 @@ Make sure you follow the [CONTRIBUTING.md](CONTRIBUTING.md) guidelines before ma
 | ------------------------------------ | ------------------------------------------------------------ |
 | [docs/Database.md](docs/Database.md) | Database documentation including schemas, triggers and procedures |
 | [docs/CICD.md](docs/CICD.md)         | CICD documentation.                                          |
-|                                      |                                                              |
+| [Deploy.md](Deploy.md)               | Deployment manual                                            |
 
 ## Development
+
+### Virtual environment
+
+Make sure you have a virtual environment.
+
+```shell
+python -m venv venv && ./venv/scripts/activate
+```
+
+Install dependencies
+
+```shell
+pip install -r requirements.txt
+```
+
+### Services
 
 To start the `redis` and `postgres` service in the localhost run:
 

@@ -1,0 +1,17 @@
+name: Deploy
+
+on:
+  registry_package:
+    types: ["published"]
+
+permissions: read-all
+
+jobs:
+  deploy_:
+    runs-on: kube-master
+    steps:
+      - name: Deploy to kubernetes cluster
+        run: kubectl -n resupply rollout restart deployment/dealer-deployment
+        env:
+          KUBECONFIG: /opt/runner/kubeconfig.yaml
+
