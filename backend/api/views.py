@@ -1,5 +1,6 @@
 from rest_framework.decorators import  api_view
 from rest_framework.response import Response
+from rest_framework import status
 from .serializers import StoreSerializer, ClientSerializer
 from .models import Stores, Clients
 from django.core.cache import cache
@@ -30,7 +31,7 @@ def storesRegister(request):
         address = data["address"],
     )
 
-    return Response("Account registered")
+    return Response("Account registered",status= status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
 def storesLogin(request):
@@ -49,9 +50,9 @@ def storesLogin(request):
             response_data = {"token": token}
             return Response(response_data)
         else: 
-            return Response("Wrong password")
+            return Response("Wrong password",status= status.HTTP_401_UNAUTHORIZED)
     else:
-        return Response("Username not found")
+        return Response("Username not found",status= status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET','PATCH'])
 def storesAccount(request):
@@ -64,7 +65,7 @@ def storesAccount(request):
             return Response(serializer.data)
         
         else:
-            return Response("Session not found")
+            return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else:
         data = request.data
         phone_v = data["phone"]
@@ -82,7 +83,7 @@ def storesAccount(request):
             return Response("Account details updated")
     
         else:
-            return Response("Session not found")
+            return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
 #Clients methods
 
 @api_view(['PUT'])
@@ -121,9 +122,9 @@ def clientsLogin(request):
             response_data = {"token": token}
             return Response(response_data)
         else: 
-            return Response("Wrong password")
+            return Response("Wrong password",status= status.HTTP_401_UNAUTHORIZED)
     else:
-        return Response("Username not found")
+        return Response("Username not found",status= status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET','PATCH'])
 def clientsAccount(request):
@@ -136,7 +137,7 @@ def clientsAccount(request):
             return Response(serializer.data)
         
         else:
-            return Response("Session not found")
+            return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else:
         data = request.data
         phone_v = data["phone"]
@@ -154,5 +155,5 @@ def clientsAccount(request):
             return Response("Account details updated")
     
         else:
-            return Response("Session not found")
+            return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
         
