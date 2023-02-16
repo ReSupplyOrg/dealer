@@ -1,6 +1,6 @@
 from rest_framework.decorators import  api_view
 from rest_framework.response import Response
-from .serializers import StoreSerializer
+from .serializers import StoreSerializer, ClientSerializer
 from .models import Stores, Clients
 from django.core.cache import cache
 #from django.core.cache.backends.redis import RedisCache
@@ -45,7 +45,7 @@ def storesLogin(request):
         hash = bcrypt.hashpw(bytes_v, salt)
         if bytes(user.password_hash) == hash:
             token = secrets.token_hex(16)
-            cache.add(token, user.uuid, 30)
+            cache.add(token, user.uuid, 2629800)
             response_data = {"token": token}
             return Response(response_data)
         else: 
@@ -86,10 +86,27 @@ def clientsLogin(request):
         hash = bcrypt.hashpw(bytes_v, salt)
         if bytes(user.password_hash) == hash:
             token = secrets.token_hex(16)
-            cache.add(token, user.uuid, 30)
+            print(user.uuid)
+            cache.add(token, user.uuid, 2629800)
             response_data = {"token": token}
             return Response(response_data)
         else: 
             return Response("Wrong password")
     else:
         return Response("Username not found")
+
+@api_view(['GET'])
+def clientsAccount(request):
+    session = request.headers["session"]
+    print(type(session))
+    uuid_v = cache.get(session)
+    if uuid_v is not None:
+        user = Clients.objects.get(uuid=uuid_v)
+        serializer = ClientSerializer(user, many = False)
+        return Response(serializer.data)
+    
+    else:
+        return Response("No value found in cache for session")
+
+     
+    
