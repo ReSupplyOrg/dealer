@@ -23,8 +23,8 @@ def storesRegister(request):
     Stores.objects.create(
         phone = data["phone"],
         #image_bytes = base64.b64encode(data["image"]),
-        name = data["username"],
-        username = data["name"],
+        username = data["username"],
+        name = data["name"],
         password_hash = hash,
         password_salt = salt,
         address = data["address"],
@@ -95,18 +95,34 @@ def clientsLogin(request):
     else:
         return Response("Username not found")
 
-@api_view(['GET'])
+@api_view(['GET','PATCH'])
 def clientsAccount(request):
     session = request.headers["session"]
-    print(type(session))
     uuid_v = cache.get(session)
-    if uuid_v is not None:
-        user = Clients.objects.get(uuid=uuid_v)
-        serializer = ClientSerializer(user, many = False)
-        return Response(serializer.data)
-    
+    if request.method == 'GET':
+        if uuid_v is not None:
+            user = Clients.objects.get(uuid=uuid_v)
+            serializer = ClientSerializer(user, many = False)
+            return Response(serializer.data)
+        
+        else:
+            return Response("Session not found")
     else:
-        return Response("No value found in cache for session")
-
-     
+        data = request.data
+        phone_v = data["phone"]
+        #image = base64.b64encode(data["image"]),
+        names_v = data["names"]
+        bytes_v = data["password"].encode('utf-8')
+        if uuid_v is not None:
+            user = Clients.objects.get(uuid=uuid_v)
+            user.phone = phone_v
+            user.names = names_v
+            
+            salt = bytes(user.password_salt)
+            user.password_hash = bcrypt.hashpw(bytes_v, salt)
+            user.save()
+            return Response("Account details updated")
     
+        else:
+            return Response("Session not found")
+        
