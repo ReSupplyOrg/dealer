@@ -2,9 +2,11 @@ from rest_framework.decorators import  api_view
 from rest_framework.response import Response
 from .serializers import StoreSerializer
 from .models import Stores, Clients
+from django.core.cache import cache
+#from django.core.cache.backends.redis import RedisCache
 
-import bcrypt
-import base64
+import bcrypt, secrets
+
 
 @api_view(["GET"])
 def echo(request):
@@ -57,12 +59,16 @@ def clientsLogin(request):
 
     username_v = data["username"]
     bytes_v = data["password"].encode('utf-8')
-    username = Clients.objects.get(username=username_v)
-    if username:
-        salt = bytes(username.password_salt)
+    user = Clients.objects.get(username=username_v)
+    if user:
+        
+        salt = bytes(user.password_salt)
         hash = bcrypt.hashpw(bytes_v, salt)
-        if bytes(username.password_hash) == hash:
-            return Response("Welcome!")
+        if bytes(user.password_hash) == hash:
+            token = secrets.token_hex(16)
+            cache.add(token, user.uuid, 30)
+            response_data = {"token": token}
+            return Response(response_data)
         else: 
             return Response("Wrong password")
     else:
