@@ -54,6 +54,7 @@ def storesLogin(request):
         return Response("Username not found")
 
 #Clients methods
+
 @api_view(['PUT'])
 def clientsRegister(request):
     data = request.data
@@ -86,7 +87,6 @@ def clientsLogin(request):
         hash = bcrypt.hashpw(bytes_v, salt)
         if bytes(user.password_hash) == hash:
             token = secrets.token_hex(16)
-            print(user.uuid)
             cache.add(token, user.uuid, 2629800)
             response_data = {"token": token}
             return Response(response_data)
