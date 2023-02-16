@@ -32,6 +32,26 @@ def storesRegister(request):
 
     return Response("Account registered")
 
+@api_view(['POST'])
+def storesLogin(request):
+    data = request.data
+
+    username_v = data["username"]
+    bytes_v = data["password"].encode('utf-8')
+    user = Stores.objects.get(username=username_v)
+    if user:
+        
+        salt = bytes(user.password_salt)
+        hash = bcrypt.hashpw(bytes_v, salt)
+        if bytes(user.password_hash) == hash:
+            token = secrets.token_hex(16)
+            cache.add(token, user.uuid, 30)
+            response_data = {"token": token}
+            return Response(response_data)
+        else: 
+            return Response("Wrong password")
+    else:
+        return Response("Username not found")
 
 #Clients methods
 @api_view(['PUT'])
