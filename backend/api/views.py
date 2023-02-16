@@ -53,6 +53,36 @@ def storesLogin(request):
     else:
         return Response("Username not found")
 
+@api_view(['GET','PATCH'])
+def storesAccount(request):
+    session = request.headers["session"]
+    uuid_v = cache.get(session)
+    if request.method == 'GET':
+        if uuid_v is not None:
+            user = Stores.objects.get(uuid=uuid_v)
+            serializer = Stores(user, many = False)
+            return Response(serializer.data)
+        
+        else:
+            return Response("Session not found")
+    else:
+        data = request.data
+        phone_v = data["phone"]
+        #image = base64.b64encode(data["image"]),
+        name_v = data["name"]
+        bytes_v = data["password"].encode('utf-8')
+        if uuid_v is not None:
+            user = Clients.objects.get(uuid=uuid_v)
+            user.phone = phone_v
+            user.names = name_v
+            
+            salt = bytes(user.password_salt)
+            user.password_hash = bcrypt.hashpw(bytes_v, salt)
+            user.save()
+            return Response("Account details updated")
+    
+        else:
+            return Response("Session not found")
 #Clients methods
 
 @api_view(['PUT'])

@@ -4,7 +4,7 @@ from .models import Stores, Clients, Packs, Orders, Ratings
 class StoreSerializer(ModelSerializer):
     class Meta:
         model = Stores
-        fields = '__all__'
+        fields = ['uuid','phone','confirmed','username','name']
 
 class ClientSerializer(ModelSerializer):
     class Meta:
