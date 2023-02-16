@@ -31,7 +31,7 @@ def storesRegister(request):
         address = data["address"],
     )
 
-    return Response("Account registered",status= status.HTTP_401_UNAUTHORIZED)
+    return Response("Account registered")
 
 @api_view(['POST'])
 def storesLogin(request):
