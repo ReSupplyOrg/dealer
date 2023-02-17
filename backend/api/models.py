@@ -18,9 +18,11 @@ class Clients(models.Model):
     password_salt =  models.BinaryField()
     password_hash = models.BinaryField()
     
-
     def __str__(self):
         return '{} {} {} {} {}'.format(self.uuid, self.phone, self.username, self.names, self.password_hash)
+    
+    class Meta:
+        ordering = ['-creation']
 
 class Stores(models.Model):
     uuid = models.UUIDField(
@@ -43,6 +45,8 @@ class Stores(models.Model):
     def __str__(self):
         return '{} {} {} {} {} {}'.format(self.uuid, self.phone, self.username, self.name, self.address, self.password_hash)
 
+    class Meta:
+        ordering = ['-creation']
 
 class Ratings(models.Model):
     creation = models.DateTimeField(auto_now_add=True)
@@ -54,6 +58,9 @@ class Ratings(models.Model):
 
     def __str__(self):
         return '{} {} {}'.format(self.client_uuid, self.store_uuid, self.rating)
+
+    class Meta:
+        ordering = ['-creation']
 
 class Packs(models.Model):
     uuid = models.UUIDField(
@@ -79,6 +86,9 @@ class Packs(models.Model):
     def __str__(self):
         return '{} {} {} {} {} {}'.format(self.uuid, self.owner, self.stock, self.price, self.name, self.description)
 
+    class Meta:
+        ordering = ['-creation']
+
 class Orders(models.Model):
     uuid = models.UUIDField(
          primary_key = True,
@@ -98,3 +108,6 @@ class Orders(models.Model):
 
     def __str__(self):
         return '{} {} {} {} {}'.format(self.uuid, self.client_uuid, self.store_uuid, self.pack_uuid, self.payed_price)
+    
+    class Meta:
+        ordering = ['-creation']
