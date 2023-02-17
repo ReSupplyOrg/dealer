@@ -37,7 +37,6 @@ def storesRegister(request):
 @api_view(['POST'])
 def storesLogin(request):
     data = request.data
-
     username_v = data["username"]
     bytes_v = data["password"].encode('utf-8')
     try:
@@ -103,11 +102,10 @@ def clientsRegister(request):
 @api_view(['POST'])
 def clientsLogin(request):
     data = request.data
-
     username_v = data["username"]
     bytes_v = data["password"].encode('utf-8')
-    user = Clients.objects.get(username=username_v)
-    if user:
+    try:
+        user = Clients.objects.get(username=username_v) 
         salt = bytes(user.password_salt)
         hash = bcrypt.hashpw(bytes_v, salt)
         if bytes(user.password_hash) == hash:
@@ -117,7 +115,7 @@ def clientsLogin(request):
             return Response(response_data)
         else: 
             return Response("Wrong password",status= status.HTTP_401_UNAUTHORIZED)
-    else:
+    except:
         return Response("Username not found",status= status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET','PATCH'])
