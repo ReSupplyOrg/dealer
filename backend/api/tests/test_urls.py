@@ -1,8 +1,12 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from api.views import storesRegister, storesLogin, storesAccount, clientsRegister, clientsLogin, clientsAccount
+from api.views import echo, storesRegister, storesLogin, storesAccount, clientsRegister, clientsLogin, clientsAccount
 
 class TestUrls(SimpleTestCase):
+
+    def test_echo_resolves(self):
+        url = reverse("echo")
+        self.assertEquals(resolve(url).func,echo)
 
     def test_stores_register_resolves(self):
         url = reverse("stores_register")

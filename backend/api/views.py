@@ -20,17 +20,16 @@ def echo(request):
 @api_view(['PUT'])
 def storesRegister(request):
     data = request.data
-    salt = str(bcrypt.gensalt())
+    salt = bcrypt.gensalt()
     bytes = data["password"].encode('utf-8')
     hash = bcrypt.hashpw(bytes, salt)
     Stores.objects.create(
         phone = data["phone"],
         #image_bytes = base64.b64encode(data["image"]),
-        username = data["username"],
         name = data["name"],
+        username = data["username"],
         password_hash = hash,
         password_salt = salt,
-        address = data["address"],
     )
 
     return Response("Account registered")
@@ -89,9 +88,8 @@ def clientsRegister(request):
     data = request.data
     salt = bcrypt.gensalt()
     bytes = data["password"].encode('utf-8')
-    print(salt)
+
     hash = bcrypt.hashpw(bytes, salt)
-    print(hash)
     Clients.objects.create(
         phone = data["phone"],
         #image_bytes = base64.b64encode(data["image"]),
