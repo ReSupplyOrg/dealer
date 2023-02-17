@@ -1,8 +1,8 @@
 from rest_framework.decorators import  api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import StoreSerializer, SearchStoreSerializer, ClientSerializer
-from .models import Stores, Clients
+from .serializers import StoreSerializer, SearchStoreSerializer, ClientSerializer, SearchPackSerializer
+from .models import Stores, Clients, Packs
 from django.core.cache import cache
 from .middleware import Auth_Middleware
 from django.core.paginator import Paginator
@@ -166,6 +166,33 @@ def searchStores(request):
         page_obj = paginator.get_page(page_number)
 
         serializer = SearchStoreSerializer(page_obj, many= True)
+
+        search_result= {
+            "totalPages": paginator.num_pages,
+            "items": serializer.data
+        }
+        return Response(search_result)
+    
+@api_view(['POST'])
+def searchPacks(request):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else: 
+        data = request.data
+        filters = {}
+        for key, value in data.items():
+            if key!="page":
+                if value:
+                    filters[key + '__icontains']= value
+        
+        packs = Packs.objects.filter(**filters)
+        paginator = Paginator(packs, 20)
+
+        page_number = request.data.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        serializer = SearchPackSerializer(page_obj, many= True)
 
         search_result= {
             "totalPages": paginator.num_pages,
