@@ -166,4 +166,9 @@ def searchStores(request):
         page_obj = paginator.get_page(page_number)
 
         serializer = SearchStoreSerializer(page_obj, many= True)
-        return Response(serializer.data)
+
+        search_result= {
+            "totalPages": paginator.num_pages,
+            "items": serializer.data
+        }
+        return Response(search_result)
