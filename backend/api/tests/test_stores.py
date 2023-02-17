@@ -7,14 +7,9 @@ class TestStores(TestCase):
     
     def setUp(self):
         self.client = APIClient()
-        self.echo_url = reverse('echo')
         self.stores_register_url = reverse("stores_register")
         self.stores_login_url = reverse("stores_login")
         self.stores_account_url = reverse("stores_account")
-
-    def test_echo_GET(self):
-        response = self.client.get(self.echo_url)
-        self.assertEquals(response.status_code, 200)
 
     def test_stores_register_login_account_success(self):
         raw_data = {
