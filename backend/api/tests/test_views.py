@@ -48,8 +48,8 @@ class TestStores(TestCase):
             self.assertEquals(response.status_code,200)
 
             raw_data2 = {
-                "username": "domihoes",
-                "password": "123456",
+                "username": "dominoes",
+                "password": "12345",
             }
             response = self.client.post(self.stores_login_url,format='json',data=raw_data2)
             self.assertEquals(response.status_code,401)
