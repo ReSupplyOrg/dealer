@@ -16,4 +16,5 @@ urlpatterns = [
 
     #everyone urls
     path('search/stores/', views.searchStores, name="search_stores"),
+    path('search/packs/', views.searchPacks, name="search_packs"),
 ]

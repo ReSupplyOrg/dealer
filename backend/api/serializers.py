@@ -16,7 +16,13 @@ class SearchPackSerializer(ModelSerializer):
         model = Packs
         fields = ['name','description','owner','stock','price','type']
 
+class SearchOrderSerializer(ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = ['buyer','store','pack','status','price']
+
 class ClientSerializer(ModelSerializer):
     class Meta:
         model = Clients
         fields = ['uuid','phone','confirmed','username','names']
+
