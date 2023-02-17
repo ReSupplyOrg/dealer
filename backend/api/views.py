@@ -4,6 +4,8 @@ from rest_framework import status
 from .serializers import StoreSerializer, ClientSerializer
 from .models import Stores, Clients
 from django.core.cache import cache
+from .middleware import Auth_Middleware
+
 #from django.core.cache.backends.redis import RedisCache
 
 import bcrypt, secrets
@@ -56,34 +58,30 @@ def storesLogin(request):
 
 @api_view(['GET','PATCH'])
 def storesAccount(request):
-    session = request.headers["session"]
-    uuid_v = cache.get(session)
-    if request.method == 'GET':
-        if uuid_v is not None:
-            user = Stores.objects.get(uuid=uuid_v)
-            serializer = Stores(user, many = False)
-            return Response(serializer.data)
-        
-        else:
-            return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else:
-        data = request.data
-        phone_v = data["phone"]
-        #image = base64.b64encode(data["image"]),
-        name_v = data["name"]
-        bytes_v = data["password"].encode('utf-8')
-        if uuid_v is not None:
-            user = Clients.objects.get(uuid=uuid_v)
+        if request.method == 'GET':
+            user = Stores.objects.get(uuid=uuid_v)
+            serializer = StoreSerializer(user, many = False)
+            return Response(serializer.data)
+            
+        else:
+            data = request.data
+            phone_v = data["phone"]
+            #image = base64.b64encode(data["image"]),
+            name_v = data["name"]
+            bytes_v = data["password"].encode('utf-8')
+            user = Stores.objects.get(uuid=uuid_v)
             user.phone = phone_v
-            user.names = name_v
+            user.name = name_v
             
             salt = bytes(user.password_salt)
             user.password_hash = bcrypt.hashpw(bytes_v, salt)
             user.save()
             return Response("Account details updated")
-    
-        else:
-            return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+        
 #Clients methods
 
 @api_view(['PUT'])
@@ -113,7 +111,6 @@ def clientsLogin(request):
     bytes_v = data["password"].encode('utf-8')
     user = Clients.objects.get(username=username_v)
     if user:
-        
         salt = bytes(user.password_salt)
         hash = bcrypt.hashpw(bytes_v, salt)
         if bytes(user.password_hash) == hash:
@@ -128,23 +125,21 @@ def clientsLogin(request):
 
 @api_view(['GET','PATCH'])
 def clientsAccount(request):
-    session = request.headers["session"]
-    uuid_v = cache.get(session)
-    if request.method == 'GET':
-        if uuid_v is not None:
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        if request.method == 'GET':
             user = Clients.objects.get(uuid=uuid_v)
             serializer = ClientSerializer(user, many = False)
             return Response(serializer.data)
-        
+            
         else:
-            return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
-    else:
-        data = request.data
-        phone_v = data["phone"]
-        #image = base64.b64encode(data["image"]),
-        names_v = data["names"]
-        bytes_v = data["password"].encode('utf-8')
-        if uuid_v is not None:
+            data = request.data
+            phone_v = data["phone"]
+            #image = base64.b64encode(data["image"]),
+            names_v = data["names"]
+            bytes_v = data["password"].encode('utf-8')
             user = Clients.objects.get(uuid=uuid_v)
             user.phone = phone_v
             user.names = names_v
@@ -154,6 +149,4 @@ def clientsAccount(request):
             user.save()
             return Response("Account details updated")
     
-        else:
-            return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
-        
+          
