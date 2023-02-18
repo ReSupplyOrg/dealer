@@ -14,7 +14,7 @@ class SearchStoreSerializer(ModelSerializer):
 class SearchPackSerializer(ModelSerializer):
     class Meta:
         model = Packs
-        fields = ['name','description','owner','stock','price','type']
+        fields = ['name','description','owner','stock','price','pack_type']
 
 class SearchOrderSerializer(ModelSerializer):
     class Meta:

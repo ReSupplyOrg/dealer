@@ -4,7 +4,7 @@ from rest_framework import status
 from .serializers import StoreSerializer, SearchStoreSerializer, ClientSerializer, SearchPackSerializer, SearchOrderSerializer
 from .models import Stores, Clients, Packs, Orders
 from django.core.cache import cache
-from .middleware import Auth_Middleware
+from .middleware import Auth_Middleware, Is_Store_Middleware
 from django.core.paginator import Paginator
 
 #from django.core.cache.backends.redis import RedisCache
@@ -80,6 +80,25 @@ def storesAccount(request):
             user.save()
             return Response("Account details updated")
         
+@api_view(['PUT'])
+def storesPacks(request):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        data = request.data
+        user = Stores.objects.get(uuid=uuid_v)
+        Packs.objects.create(
+            owner = user,
+            name = data["name"],
+            description = data["description"],
+            stock = data["stock"],
+            price = data["price"],
+            pack_type = data["type"]
+        )
+
+        return Response("Pack Created")
+
 #Clients methods
 
 @api_view(['PUT'])
@@ -154,10 +173,13 @@ def searchStores(request):
     else: 
         data = request.data
         filters = {}
+
+        valid_keys = {"name","phone","rating","address","username","page"}
         for key, value in data.items():
-            if key!="page":
-                if value:
-                    filters[key + '__icontains']= value
+            if(key in valid_keys):
+                if key!="page":
+                    if value:
+                        filters[key + '__icontains']= value
         
         stores = Stores.objects.filter(**filters)
         paginator = Paginator(stores, 20)
@@ -178,13 +200,15 @@ def searchPacks(request):
     uuid_v = Auth_Middleware(request)
     if uuid_v is None:
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
-    else: 
+    else:
         data = request.data
         filters = {}
+        valid_keys = {"name","description","owner","stock","price","page"}
         for key, value in data.items():
-            if key!="page":
-                if value:
-                    filters[key + '__icontains']= value
+            if(key in valid_keys):
+                if key!="page":
+                    if value:
+                        filters[key + '__icontains']= value
         
         packs = Packs.objects.filter(**filters)
         paginator = Paginator(packs, 20)
@@ -203,15 +227,24 @@ def searchPacks(request):
 @api_view(['POST'])
 def searchOrders(request):
     uuid_v = Auth_Middleware(request)
+    #select uuuid to check if is a client or store
+    #if not null then you are a store
     if uuid_v is None:
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else: 
+        if Is_Store_Middleware==True:
+            filters = {"store__icontains":uuid_v}
+            valid_keys = {"buyer","pack","status","price","page"}
+        else:
+            filters = {"buyer__icontains":uuid_v}
+            valid_keys = {"store","pack","status","price","page"}
+        
         data = request.data
-        filters = {}
         for key, value in data.items():
-            if key!="page":
-                if value:
-                    filters[key + '__icontains']= value
+            if(key in valid_keys):
+                if key!="page":
+                    if value:
+                         filters[key + '__icontains']= value
         
         orders = Orders.objects.filter(**filters)
         paginator = Paginator(orders, 20)
