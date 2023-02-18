@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.12 (2023-02-18)
+
+
+### Features
+
+* added search routes, account queries and updates and fixed account register ([#17](https://github.com/ReSupplyOrg/dealer/issues/17)) ([9d960b7](https://github.com/ReSupplyOrg/dealer/commit/9d960b74cddb99391c78ce37ce2cf7cb6e0af703))
+
 ### 0.0.11 (2023-02-15)
 
 
