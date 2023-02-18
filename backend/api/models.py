@@ -75,16 +75,13 @@ class Packs(models.Model):
     stock = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
     name = models.TextField()
+
     STATUS_CHOICES = [
         ('fast_food', 'Fast food'),
         ('dessert', 'Dessert'),
         ('random', 'Random'),
     ]
     pack_type = models.CharField(max_length=20, choices=STATUS_CHOICES, default="random")
-    class PackType(models.TextChoices):
-        fast_food = "fast_food"
-        dessert = "dessert"
-        random = "random"
 
     description = models.TextField()
 
@@ -105,6 +102,7 @@ class Orders(models.Model):
     client_uuid = models.ForeignKey(Clients, on_delete=models.CASCADE)
     store_uuid = models.ForeignKey(Stores, on_delete=models.CASCADE)
     pack_uuid = models.ForeignKey(Packs, on_delete=models.CASCADE)
+
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('canceled', 'Canceled'),
@@ -118,3 +116,4 @@ class Orders(models.Model):
     
     class Meta:
         ordering = ['-creation']
+

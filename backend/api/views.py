@@ -1,5 +1,6 @@
 from rest_framework.decorators import  api_view
 from rest_framework.response import Response
+
 from rest_framework import status
 from .serializers import StoreSerializer, SearchStoreSerializer, ClientSerializer, SearchPackSerializer, SearchOrderSerializer
 from .models import Stores, Clients, Packs, Orders
@@ -11,7 +12,6 @@ from django.core.paginator import Paginator
 
 import bcrypt, secrets
 
-
 @api_view(["GET"])
 def echo(request):
     return Response("ECHO")
@@ -21,16 +21,21 @@ def echo(request):
 @api_view(['PUT'])
 def storesRegister(request):
     data = request.data
+
     salt = bcrypt.gensalt()
+
     bytes = data["password"].encode('utf-8')
     hash = bcrypt.hashpw(bytes, salt)
     Stores.objects.create(
         phone = data["phone"],
         #image_bytes = base64.b64encode(data["image"]),
+
         name = data["name"],
         username = data["username"],
         password_hash = hash,
         password_salt = salt,
+        address = data["address"],
+
     )
 
     return Response("Account registered")
@@ -100,7 +105,6 @@ def storesPacks(request):
         return Response("Pack Created")
 
 #Clients methods
-
 @api_view(['PUT'])
 def clientsRegister(request):
     data = request.data
@@ -108,6 +112,7 @@ def clientsRegister(request):
     bytes = data["password"].encode('utf-8')
 
     hash = bcrypt.hashpw(bytes, salt)
+
     Clients.objects.create(
         phone = data["phone"],
         #image_bytes = base64.b64encode(data["image"]),

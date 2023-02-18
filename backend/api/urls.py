@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+
     path('', views.echo, name="echo"),
     
     #stores urls
@@ -20,4 +21,5 @@ urlpatterns = [
     path('search/stores/', views.searchStores, name="search_stores"),
     path('search/packs/', views.searchPacks, name="search_packs"),
     path('search/orders/', views.searchOrders, name="search_orders"),
+
 ]
