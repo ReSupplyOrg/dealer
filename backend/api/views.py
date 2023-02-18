@@ -163,7 +163,33 @@ def clientsAccount(request):
             user.password_hash = bcrypt.hashpw(bytes_v, salt)
             user.save()
             return Response("Account details updated")
+        
+@api_view(['POST'])
+def clientsBuy(request):
+    uuid_v = Auth_Middleware(request)
+    user = Clients.objects.get(uuid=uuid_v)
+    uuid_p = request.data["uuid"]
+    pack = Packs.objects.get(uuid=uuid_p)
+    uuid_s = pack.owner
+    if(pack.stock>0):
+        Orders.objects.create(
+            client_uuid = user,
+            pack_uuid = pack,
+            #status = "pending",
+            store_uuid = uuid_s,
+            payed_price = pack.price
+        )
+        pack.stock=pack.stock-1
+        pack.save()
+        code = secrets.token_hex(4)
+        response = {
+            "code": code
+        }
+        return Response(response)
+    else:
+        return Response("No stock for that pack")
     
+
 # Everyone
 @api_view(['POST'])
 def searchStores(request):
@@ -233,18 +259,18 @@ def searchOrders(request):
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else: 
         if Is_Store_Middleware==True:
-            filters = {"store__icontains":uuid_v}
-            valid_keys = {"buyer","pack","status","price","page"}
+            filters = {"store_uuid":uuid_v}
+            valid_keys = {"client_uuid","pack_uuid","price","page"}
         else:
-            filters = {"buyer__icontains":uuid_v}
-            valid_keys = {"store","pack","status","price","page"}
+            filters = {"client_uuid":uuid_v}
+            valid_keys = {"store_uuid","pack_uuid","price","page"}
         
         data = request.data
         for key, value in data.items():
             if(key in valid_keys):
                 if key!="page":
                     if value:
-                         filters[key + '__icontains']= value
+                         filters[key]= value
         
         orders = Orders.objects.filter(**filters)
         paginator = Paginator(orders, 20)

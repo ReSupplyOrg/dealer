@@ -14,6 +14,7 @@ urlpatterns = [
     path('clients/register/', views.clientsRegister, name="clients_register"),
     path('clients/login/',views.clientsLogin, name="clients_login"),
     path('clients/account/',views.clientsAccount, name="clients_account"),
+    path('clients/buy/',views.clientsBuy, name="clients_buy"),
 
     #everyone urls
     path('search/stores/', views.searchStores, name="search_stores"),
