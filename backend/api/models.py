@@ -80,7 +80,7 @@ class Packs(models.Model):
         ('dessert', 'Dessert'),
         ('random', 'Random'),
     ]
-    pack_type = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    pack_type = models.CharField(max_length=20, choices=STATUS_CHOICES, default="random")
     class PackType(models.TextChoices):
         fast_food = "fast_food"
         dessert = "dessert"
@@ -110,7 +110,7 @@ class Orders(models.Model):
         ('canceled', 'Canceled'),
         ('completed', 'Completed'),
     ]
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
     payed_price = models.IntegerField()
 
     def __str__(self):
