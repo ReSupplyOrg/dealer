@@ -175,7 +175,7 @@ def clientsBuy(request):
         Orders.objects.create(
             client_uuid = user,
             pack_uuid = pack,
-            #status = "pending",
+            status = "pending",
             store_uuid = uuid_s,
             payed_price = pack.price
         )
@@ -253,8 +253,6 @@ def searchPacks(request):
 @api_view(['POST'])
 def searchOrders(request):
     uuid_v = Auth_Middleware(request)
-    #select uuuid to check if is a client or store
-    #if not null then you are a store
     if uuid_v is None:
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else: 
