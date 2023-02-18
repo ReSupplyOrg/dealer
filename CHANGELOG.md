@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.13 (2023-02-18)
+
+
+### Bug Fixes
+
+* fixed test job to run tests from the backend directory ([d35c44a](https://github.com/ReSupplyOrg/dealer/commit/d35c44a831f5f122c58f82a7555e8aeeebaa923b))
+
 ### 0.0.12 (2023-02-18)
 
 
