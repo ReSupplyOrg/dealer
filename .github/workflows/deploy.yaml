@@ -7,7 +7,7 @@ on:
 permissions: read-all
 
 jobs:
-  deploy_:
+  deploy:
     runs-on: kube-master
     steps:
       - name: Deploy to kubernetes cluster
