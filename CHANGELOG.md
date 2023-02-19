@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.14 (2023-02-19)
+
+
+### Bug Fixes
+
+* Added new credentials to prevent Supply chain attacks on the repository ([8114b41](https://github.com/ReSupplyOrg/dealer/commit/8114b41be7ea50578d60bf50a67734035308bcc8))
+
 ### 0.0.13 (2023-02-18)
 
 
