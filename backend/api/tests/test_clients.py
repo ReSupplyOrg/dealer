@@ -20,6 +20,7 @@ class TestClients(TestCase):
         raw_data = {
             "phone": "1234567",
             "names": "juan perez",
+            "image": "",
             "username": "juanpaez12",
             "password": "12345",
             "address": "Calle 13"
@@ -40,6 +41,7 @@ class TestClients(TestCase):
         raw_data = {
             "phone": "1234567",
             "name": "Domihoes",
+            "image": "",
             "username": "domihoes",
             "password": "12345",
             "address": "Calle 13"
@@ -72,6 +74,7 @@ class TestClients(TestCase):
         raw_data = {
             "phone": "1234567",
             "names": "juan perez",
+            "image": "",
             "username": "juanpaez12",
             "password": "12345",
             "address": "Calle 13"
@@ -91,6 +94,7 @@ class TestClients(TestCase):
         raw_data3 = {
             "phone": "1234567",
             "names": "juan paez",
+            "image": "",
             "password": "1234567890",
             "address": "Calle 13"
         }
@@ -102,6 +106,7 @@ class TestClients(TestCase):
         raw_data = {
             "phone": "1234567",
             "names": "juan perez",
+            "image": "",
             "username": "juanpaez12",
             "password": "12345",
             "address": "Calle 13"
@@ -121,6 +126,7 @@ class TestClients(TestCase):
         raw_data = {
             "phone": "1234567",
             "names": "juan perez",
+            "image": "",
             "username": "juanpaez12",
             "password": "12345",
             "address": "Calle 13"
@@ -140,6 +146,7 @@ class TestClients(TestCase):
         raw_data3 = {
             "phone": "1234567",
             "names": "juan perez",
+            "image": "",
             "username": "juanpaez12",
             "password": "12345",
             "address": "Calle 13"
@@ -159,6 +166,7 @@ class TestClients(TestCase):
         raw_data3 = {
             "phone": "1234567",
             "names": "juanpaez123",
+            "image": "",
             "password": "1234567890",
             "address": "Calle 13"
         }

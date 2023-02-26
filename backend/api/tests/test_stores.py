@@ -16,6 +16,7 @@ class TestStores(TestCase):
         raw_data = {
             "phone": "1234567",
             "name": "Domihoes",
+            "image": "",
             "username": "domihoes",
             "password": "12345",
             "address": "Calle 13"
@@ -47,6 +48,7 @@ class TestStores(TestCase):
         raw_data = {
             "phone": "1234567",
             "name": "Domihoes",
+            "image": "",
             "username": "domihoes",
             "password": "12345",
             "address": "Calle 13"
@@ -66,6 +68,7 @@ class TestStores(TestCase):
         raw_data3 = {
             "phone": "1234567",
             "name": "Dominoes",
+            "image": "",
             "password": "1234567890",
             "address": "Calle 13"
         }
@@ -77,6 +80,7 @@ class TestStores(TestCase):
             raw_data = {
                 "phone": "1234567",
                 "name": "Domihoes",
+                "image": "",
                 "username": "domihoes",
                 "password": "12345",
                 "address": "Calle 13"
@@ -96,6 +100,7 @@ class TestStores(TestCase):
             raw_data = {
                 "phone": "1234567",
                 "name": "Domihoes",
+                "image": "",
                 "username": "domihoes",
                 "password": "12345",
                 "address": "Calle 13"
@@ -115,6 +120,7 @@ class TestStores(TestCase):
         raw_data = {
             "phone": "1234567",
             "name": "Domihoes",
+            "image": "",
             "username": "domihoes",
             "password": "12345",
             "address": "Calle 13"
@@ -134,6 +140,7 @@ class TestStores(TestCase):
         raw_data3 = {
             "phone": "1234567",
             "name": "Dominoes",
+            "image": "",
             "password": "1234567890",
             "address": "Calle 13"
         }

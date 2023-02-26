@@ -28,7 +28,7 @@ def storesRegister(request):
     hash = bcrypt.hashpw(bytes, salt)
     Stores.objects.create(
         phone = data["phone"],
-        #image_bytes = base64.b64encode(data["image"]),
+        image_bytes = data["image"],
 
         name = data["name"],
         username = data["username"],
@@ -73,13 +73,13 @@ def storesAccount(request):
         else:
             data = request.data
             phone_v = data["phone"]
-            #image = base64.b64encode(data["image"]),
+            image = data["image"]
             name_v = data["name"]
             bytes_v = data["password"].encode('utf-8')
             user = Stores.objects.get(uuid=uuid_v)
             user.phone = phone_v
             user.name = name_v
-            
+            user.image_bytes = image
             salt = bytes(user.password_salt)
             user.password_hash = bcrypt.hashpw(bytes_v, salt)
             user.save()
@@ -115,7 +115,7 @@ def clientsRegister(request):
 
     Clients.objects.create(
         phone = data["phone"],
-        #image_bytes = base64.b64encode(data["image"]),
+        image_bytes = data["image"],
         names = data["names"],
         username = data["username"],
         password_hash = hash,
@@ -157,13 +157,13 @@ def clientsAccount(request):
         else:
             data = request.data
             phone_v = data["phone"]
-            #image = base64.b64encode(data["image"]),
+            image = data["image"]
             names_v = data["names"]
             bytes_v = data["password"].encode('utf-8')
             user = Clients.objects.get(uuid=uuid_v)
             user.phone = phone_v
             user.names = names_v
-            
+            user.image_bytes = image
             salt = bytes(user.password_salt)
             user.password_hash = bcrypt.hashpw(bytes_v, salt)
             user.save()
