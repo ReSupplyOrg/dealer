@@ -3,7 +3,6 @@ info:
   title: Dealer
   description: |-
     Documentation for the [dealer](https://github.com/ReSupplyOrg/dealer) API.
-
   license:
     name: All rights reserved
   version: TBA
@@ -135,6 +134,28 @@ paths:
                 properties:
                   code:
                     type: string
+        "401":
+          description: Unauthorized
+  /clients/rate:
+    post:
+      description: Rate store
+      security:
+        - sessionHeader: []
+      tags:
+        - Clients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                store:
+                  type: string
+                rating:
+                  type: number
+      responses:
+        "200":
+          description: Store rating created/updated successfully
         "401":
           description: Unauthorized
   # Stores
@@ -309,6 +330,31 @@ paths:
           description: Unauthorized
 
   # Everyone
+  /rating/{uuid}:
+    get:
+      description: Query the rating of a store
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Store rating
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rating:
+                    type: number
+        "401":
+          description: Unauthorized
   /orders/{uuid}:
     delete:
       description: Cancels an order
@@ -471,8 +517,9 @@ paths:
 components:
   securitySchemes:
     sessionHeader:
-      type: http
-      scheme: bearer
+      type: apiKey
+      in: header
+      name: Session
   schemas:
     pack-form:
       type: object
@@ -485,7 +532,7 @@ components:
           type: number
         price:
           type: number
-        type:
+        packType:
           type: string
           enum: ["vegetales", "fritanga", "..."]
     order:
@@ -565,7 +612,7 @@ components:
           type: number
         price:
           type: number
-        type:
+        packType:
           type: string
           enum: ["vegetales", "fritanga", "..."]
     store:
@@ -620,6 +667,8 @@ components:
         image:
           type: string
         username:
+          type: string
+        names:
           type: string
         password:
           type: string
