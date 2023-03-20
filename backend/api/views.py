@@ -111,22 +111,30 @@ def storesPacksID(request, uuid):
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else:
         if request.method == 'DELETE':
-            Packs.objects.delete(uuid = uuid)
-            Packs.save()
+            try:
+                pack = Packs.objects.get(uuid = uuid)
+                pack.delete()
 
-            return Response("Pack deleted succesfully")
-        else:  
-            data = request.data
-            pack = Packs.objects.get(uuid = uuid)
+                return Response("Pack deleted succesfully")
+            except:
+                return Response("Pack not found",status= status.HTTP_404_NOT_FOUND)
+        else:
+            try:
 
-            pack.name = data["name"]
-            pack.description = data["description"]
-            pack.stock = data["stock"]
-            pack.price = data["price"]
-            pack.pack_type = data["packType"]
-            pack.save()
+                data = request.data
+                pack = Packs.objects.get(uuid = uuid)
 
-            return Response("Pack updated succesfully")
+                pack.name = data["name"]
+                pack.description = data["description"]
+                pack.stock = data["stock"]
+                pack.price = data["price"]
+                pack.pack_type = data["packType"]
+                pack.save()
+
+                return Response("Pack updated succesfully")
+            
+            except:
+                return Response("Pack not found",status= status.HTTP_404_NOT_FOUND)
 
 
 #Clients methods
