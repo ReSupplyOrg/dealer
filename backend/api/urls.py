@@ -10,12 +10,14 @@ urlpatterns = [
     path('stores/login/', views.storesLogin, name="stores_login"),
     path('stores/account/',views.storesAccount, name="stores_account"),
     path('stores/packs/',views.storesPacks, name="stores_packs"),
+    path('images/stores/<uuid>/', views.imagesStores, name="images_stores"),
     
     #clients urls
     path('clients/register/', views.clientsRegister, name="clients_register"),
     path('clients/login/',views.clientsLogin, name="clients_login"),
     path('clients/account/',views.clientsAccount, name="clients_account"),
     path('clients/buy/',views.clientsBuy, name="clients_buy"),
+    path('images/clients/<uuid>/', views.imagesClients, name="images_clients"),
 
     #everyone urls
     path('search/stores/', views.searchStores, name="search_stores"),
