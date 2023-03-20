@@ -288,3 +288,18 @@ def searchOrders(request):
             "items": serializer.data
         }
         return Response(search_result)
+    
+@api_view(['GET'])
+def imagesPack(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        pack = Packs.objects.get(uuid = uuid)
+
+        image = pack.image_bytes
+
+        image_json = {
+            "image": image
+        }
+        return Response(image_json)
