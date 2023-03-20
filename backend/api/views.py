@@ -104,6 +104,29 @@ def storesPacks(request):
 
         return Response("Pack Created")
     
+@api_view(['DELETE','PATCH'])
+def storesPacksID(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        if request.method == 'DELETE':
+            Packs.objects.delete(uuid = uuid)
+            Packs.save()
+
+            return Response("Pack deleted succesfully")
+        else:  
+            data = request.data
+            pack = Packs.objects.get(uuid = uuid)
+
+            pack.name = data["name"]
+            pack.description = data["description"]
+            pack.stock = data["stock"]
+            pack.price = data["price"]
+            pack.pack_type = data["packType"]
+            pack.save()
+
+            return Response("Pack updated succesfully")
 
 
 #Clients methods
