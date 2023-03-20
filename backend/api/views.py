@@ -366,3 +366,18 @@ def imagesClients(request, uuid):
             "image": image
         }
         return Response(image_json)
+    
+@api_view(['DELETE'])
+def deleteOrder(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        try:
+            order = Orders.objects.get(uuid = uuid)
+            order.status = "canceled"
+            order.save()
+
+            return Response("Order canceled succesfully")
+        except:
+            return Response("Order not found",status= status.HTTP_404_NOT_FOUND )

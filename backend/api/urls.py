@@ -26,5 +26,6 @@ urlpatterns = [
     path('images/pack/<uuid>/', views.imagesPack, name="images_pack"),
     path('images/stores/<uuid>/', views.imagesStores, name="images_stores"),
     path('images/clients/<uuid>/', views.imagesClients, name="images_clients"),
+    path('orders/<uuid>', views.deleteOrder, name = "delete_order"),
 
 ]
