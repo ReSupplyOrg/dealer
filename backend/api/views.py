@@ -104,20 +104,7 @@ def storesPacks(request):
 
         return Response("Pack Created")
     
-@api_view(['GET'])
-def imagesStores(request, uuid):
-    uuid_v = Auth_Middleware(request)
-    if uuid_v is None:
-        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
-    else:
-        pack = Stores.objects.get(uuid = uuid)
 
-        image = pack.image_bytes
-
-        image_json = {
-            "image": image
-        }
-        return Response(image_json)
 
 #Clients methods
 @api_view(['PUT'])
@@ -209,20 +196,6 @@ def clientsBuy(request):
     else:
         return Response("No stock for that pack")
     
-@api_view(['GET'])
-def imagesClients(request, uuid):
-    uuid_v = Auth_Middleware(request)
-    if uuid_v is None:
-        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
-    else:
-        pack = Clients.objects.get(uuid = uuid)
-
-        image = pack.image_bytes
-
-        image_json = {
-            "image": image
-        }
-        return Response(image_json)
     
 # Everyone
 @api_view(['POST'])
@@ -325,6 +298,36 @@ def imagesPack(request, uuid):
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else:
         pack = Packs.objects.get(uuid = uuid)
+
+        image = pack.image_bytes
+
+        image_json = {
+            "image": image
+        }
+        return Response(image_json)
+    
+@api_view(['GET'])
+def imagesStores(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        pack = Stores.objects.get(uuid = uuid)
+
+        image = pack.image_bytes
+
+        image_json = {
+            "image": image
+        }
+        return Response(image_json)
+    
+@api_view(['GET'])
+def imagesClients(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        pack = Clients.objects.get(uuid = uuid)
 
         image = pack.image_bytes
 
