@@ -77,11 +77,15 @@ def storesAccount(request):
             name_v = data["name"]
             bytes_v = data["password"].encode('utf-8')
             user = Stores.objects.get(uuid=uuid_v)
-            user.phone = phone_v
-            user.name = name_v
-            user.image_bytes = image
-            salt = bytes(user.password_salt)
-            user.password_hash = bcrypt.hashpw(bytes_v, salt)
+            if(phone_v != ""):
+                user.phone = phone_v
+            if(name_v != ""):
+                user.name = name_v
+            if(image != ""): 
+                user.image_bytes = image
+            if(bytes_v != ""):
+                salt = bytes(user.password_salt)
+                user.password_hash = bcrypt.hashpw(bytes_v, salt)
             user.save()
             return Response("Account details updated")
         
