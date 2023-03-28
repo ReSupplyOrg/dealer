@@ -198,11 +198,15 @@ def clientsAccount(request):
             names_v = data["names"]
             bytes_v = data["password"].encode('utf-8')
             user = Clients.objects.get(uuid=uuid_v)
-            user.phone = phone_v
-            user.names = names_v
-            user.image_bytes = image
-            salt = bytes(user.password_salt)
-            user.password_hash = bcrypt.hashpw(bytes_v, salt)
+            if(phone_v != ""):
+                user.phone = phone_v
+            if(names_v != ""):
+                user.names = names_v
+            if(image != ""): 
+                user.image_bytes = image
+            if(bytes_v != ""):
+                salt = bytes(user.password_salt)
+                user.password_hash = bcrypt.hashpw(bytes_v, salt)
             user.save()
             return Response("Account details updated")
         
