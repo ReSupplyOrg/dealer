@@ -3,10 +3,11 @@ from rest_framework.response import Response
 
 from rest_framework import status
 from .serializers import StoreSerializer, SearchStoreSerializer, ClientSerializer, SearchPackSerializer, SearchOrderSerializer
-from .models import Stores, Clients, Packs, Orders
+from .models import Stores, Clients, Packs, Orders, Ratings
 from django.core.cache import cache
 from .middleware import Auth_Middleware, Is_Store_Middleware
 from django.core.paginator import Paginator
+from django.db.models import Avg
 
 #from django.core.cache.backends.redis import RedisCache
 
@@ -235,7 +236,36 @@ def clientsBuy(request):
     else:
         return Response("No stock for that pack")
     
-    
+@api_view(['POST'])
+def clientsRate(request):
+    uuid_v = Auth_Middleware(request)
+    user = Clients.objects.get(uuid=uuid_v)
+    try:
+        store =  Stores.objects.get(name = request["store"])
+        
+        order_count =  Orders.objects.count(
+            client_uuid = user,
+            store_uuid = store,
+            status = "Completed"
+        )
+        if order_count > 0:
+            Ratings.objects.update_or_create(
+                client_uuid = user,
+                store_uuid = store,
+                rating = request["rating"]
+            )
+            
+            rate = Ratings.objects.filter(store_uuid = store).aggregate(Avg('rating'))
+            store.rating = rate
+            store.save()
+
+            return Response("Store rating created/updated successfully",status= status.HTTP_200_OK)
+        
+        else:
+            return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    except:
+        return Response("Store not found",status= status.HTTP_401_UNAUTHORIZED)
+
 # Everyone
 @api_view(['POST'])
 def searchStores(request):

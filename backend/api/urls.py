@@ -17,6 +17,7 @@ urlpatterns = [
     path('clients/login/',views.clientsLogin, name="clients_login"),
     path('clients/account/',views.clientsAccount, name="clients_account"),
     path('clients/buy/',views.clientsBuy, name="clients_buy"),
+    path('clients/rate/',views.clientsRate, name="clients_rate"),
     
 
     #everyone urls
