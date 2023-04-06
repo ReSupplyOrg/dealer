@@ -141,6 +141,13 @@ def storesPacksID(request, uuid):
             except:
                 return Response("Pack not found",status= status.HTTP_404_NOT_FOUND)
 
+@api_view(['POST'])
+def storesCompleteOrder(request, code):
+    data = request.data
+
+
+
+
 
 #Clients methods
 @api_view(['PUT'])
@@ -219,16 +226,25 @@ def clientsBuy(request):
     pack = Packs.objects.get(uuid=uuid_p)
     uuid_s = pack.owner
     if(pack.stock>0):
-        Orders.objects.create(
+        order = Orders.objects.create(
             client_uuid = user,
             pack_uuid = pack,
             status = "pending",
             store_uuid = uuid_s,
             payed_price = pack.price
         )
+        order.save()
         pack.stock=pack.stock-1
         pack.save()
         code = secrets.token_hex(4)
+        """
+        order = Orders.objects.get(
+            client_uuid = user,
+            pack_uuid = pack,
+            store_uuid = uuid_s
+        )
+        """
+        cache.add(code, order.uuid, 86400)
         response = {
             "code": code
         }
@@ -239,9 +255,10 @@ def clientsBuy(request):
 @api_view(['POST'])
 def clientsRate(request):
     uuid_v = Auth_Middleware(request)
+    data = request.data
     user = Clients.objects.get(uuid=uuid_v)
     try:
-        store =  Stores.objects.get(name = request["store"])
+        store =  Stores.objects.get(name = data["store"])
         
         order_count =  Orders.objects.count(
             client_uuid = user,
@@ -252,7 +269,7 @@ def clientsRate(request):
             Ratings.objects.update_or_create(
                 client_uuid = user,
                 store_uuid = store,
-                rating = request["rating"]
+                rating = data["rating"]
             )
             
             rate = Ratings.objects.filter(store_uuid = store).aggregate(Avg('rating'))
