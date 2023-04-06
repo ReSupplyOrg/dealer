@@ -34,7 +34,7 @@ class Stores(models.Model):
     deletion = models.DateTimeField(auto_now=True)
     phone = models.TextField()
     confirmed = models.BooleanField(default=False)
-    image_bytes = models.ImageField(null=True, max_length=10000)
+    image_bytes = models.ImageField(null=True)
     name = models.TextField()
     rating = models.FloatField(default=0)
     address = models.TextField()

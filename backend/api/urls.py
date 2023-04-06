@@ -26,9 +26,9 @@ urlpatterns = [
     path('search/stores/', views.searchStores, name="search_stores"),
     path('search/packs/', views.searchPacks, name="search_packs"),
     path('search/orders/', views.searchOrders, name="search_orders"),
-    path('images/pack/<uuid>/', views.imagesPack, name="images_pack"),
-    path('images/stores/<uuid>/', views.imagesStores, name="images_stores"),
-    path('images/clients/<uuid>/', views.imagesClients, name="images_clients"),
+    path('images/pack/<uuid>', views.imagesPack, name="images_pack"),
+    path('images/stores/<uuid>', views.imagesStores, name="images_stores"),
+    path('images/clients/<uuid>', views.imagesClients, name="images_clients"),
     path('orders/<uuid>', views.deleteOrder, name = "delete_order"),
 
 ]

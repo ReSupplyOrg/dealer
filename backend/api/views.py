@@ -27,17 +27,25 @@ def storesRegister(request):
 
     bytes = data["password"].encode('utf-8')
     hash = bcrypt.hashpw(bytes, salt)
-    Stores.objects.create(
-        phone = data["phone"],
-        image_bytes = data["image"],
-
-        name = data["name"],
-        username = data["username"],
-        password_hash = hash,
-        password_salt = salt,
-        address = data["address"],
-
-    )
+    if "image" in data and data["image"]:
+        Stores.objects.create(
+            phone = data["phone"],
+            image_bytes = data["image"],
+            name = data["name"],
+            username = data["username"],
+            password_hash = hash,
+            password_salt = salt,
+            address = data["address"],
+        )
+    else:
+        Stores.objects.create(
+            phone = data["phone"],
+            name = data["name"],
+            username = data["username"],
+            password_hash = hash,
+            password_salt = salt,
+            address = data["address"],
+        )
 
     return Response("Account registered")
 
@@ -98,14 +106,25 @@ def storesPacks(request):
     else:
         data = request.data
         user = Stores.objects.get(uuid=uuid_v)
-        Packs.objects.create(
-            owner = user,
-            name = data["name"],
-            description = data["description"],
-            stock = data["stock"],
-            price = data["price"],
-            pack_type = data["type"]
-        )
+        if "image" in data and data["image"]:
+            Packs.objects.create(
+                owner = user,
+                name = data["name"],
+                description = data["description"],
+                image_bytes = data["image"],
+                stock = data["stock"],
+                price = data["price"],
+                pack_type = data["type"]
+            )
+        else:
+            Packs.objects.create(
+                owner = user,
+                name = data["name"],
+                description = data["description"],
+                stock = data["stock"],
+                price = data["price"],
+                pack_type = data["type"]
+            )
 
         return Response("Pack Created")
     
@@ -113,62 +132,71 @@ def storesPacks(request):
 def storesPacksID(request, uuid):
     uuid_v = Auth_Middleware(request)
     if uuid_v is None:
-        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
     else:
-        if request.method == 'DELETE':
-            try:
-                pack = Packs.objects.get(uuid = uuid)
-                pack.delete()
-
-                return Response("Pack deleted succesfully")
-            except:
-                return Response("Pack not found",status= status.HTTP_404_NOT_FOUND)
+        if uuid_v is None:
+            return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
         else:
-            try:
+            if request.method == 'DELETE':
+                try:
+                    pack = Packs.objects.get(uuid = uuid)
+                    pack.delete()
 
-                data = request.data
-                pack = Packs.objects.get(uuid = uuid)
+                    return Response("Pack deleted succesfully")
+                except:
+                    return Response("Pack not found",status= status.HTTP_404_NOT_FOUND)
+            else:
+                try:
 
-                pack.name = data["name"]
-                pack.description = data["description"]
-                pack.stock = data["stock"]
-                pack.price = data["price"]
-                pack.pack_type = data["packType"]
-                pack.save()
+                    data = request.data
+                    pack = Packs.objects.get(uuid = uuid)
 
-                return Response("Pack updated succesfully")
-            
-            except:
-                return Response("Pack not found",status= status.HTTP_404_NOT_FOUND)
+                    pack.name = data["name"]
+                    pack.description = data["description"]
+                    pack.stock = data["stock"]
+                    pack.price = data["price"]
+                    pack.pack_type = data["packType"]
+                    pack.save()
+
+                    return Response("Pack updated succesfully")
+                
+                except:
+                    return Response("Pack not found",status= status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
 def storesCompleteOrder(request, code):
     uuid_v = Auth_Middleware(request)
-    try:
-        uuid_o_v = cache.get(code)
-        order = Orders.objects.get(uuid = uuid_o_v)
-        order.status = "completed"
-        print("hola")
-        order.save()
-        
-        return Response("Order completed",status= status.HTTP_200_OK) 
-    
-    except:
+    if uuid_v is None:
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        try:
+            uuid_o_v = cache.get(code)
+            order = Orders.objects.get(uuid = uuid_o_v)
+            order.status = "completed"
+            print("hola")
+            order.save()
+            
+            return Response("Order completed",status= status.HTTP_200_OK) 
+        
+        except:
+            return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
     
 @api_view(['PUT'])
 def storeLocation(request):
     uuid_v = Auth_Middleware(request)
-    data = request.data
-    try:
-        store = Stores.objects.get(uuid = uuid_v)
-        store.latitude = data["latitude"]
-        store.longitude = data["longitude"]
-        store.save()
-        
-        return Response("Location added succesfully",status= status.HTTP_200_OK) 
-    except:
+    if uuid_v is None:
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        data = request.data
+        try:
+            store = Stores.objects.get(uuid = uuid_v)
+            store.latitude = data["latitude"]
+            store.longitude = data["longitude"]
+            store.save()
+            
+            return Response("Location added succesfully",status= status.HTTP_200_OK) 
+        except:
+            return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
 
 #Clients methods
 @api_view(['PUT'])
@@ -242,68 +270,74 @@ def clientsAccount(request):
 @api_view(['POST'])
 def clientsBuy(request):
     uuid_v = Auth_Middleware(request)
-    user = Clients.objects.get(uuid=uuid_v)
-    uuid_p = request.data["uuid"]
-    pack = Packs.objects.get(uuid=uuid_p)
-    uuid_s = pack.owner
-    if(pack.stock>0):
-        order = Orders.objects.create(
-            client_uuid = user,
-            pack_uuid = pack,
-            status = "pending",
-            store_uuid = uuid_s,
-            payed_price = pack.price
-        )
-        order.save()
-        pack.stock=pack.stock-1
-        pack.save()
-        code = secrets.token_hex(4)
-        """
-        order = Orders.objects.get(
-            client_uuid = user,
-            pack_uuid = pack,
-            store_uuid = uuid_s
-        )
-        """
-        cache.add(code, order.uuid, 86400)
-        response = {
-            "code": code
-        }
-        return Response(response)
+    if uuid_v is None:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
     else:
-        return Response("No stock for that pack")
+        user = Clients.objects.get(uuid=uuid_v)
+        uuid_p = request.data["uuid"]
+        pack = Packs.objects.get(uuid=uuid_p)
+        uuid_s = pack.owner
+        if(pack.stock>0):
+            order = Orders.objects.create(
+                client_uuid = user,
+                pack_uuid = pack,
+                status = "pending",
+                store_uuid = uuid_s,
+                payed_price = pack.price
+            )
+            order.save()
+            pack.stock=pack.stock-1
+            pack.save()
+            code = secrets.token_hex(4)
+            """
+            order = Orders.objects.get(
+                client_uuid = user,
+                pack_uuid = pack,
+                store_uuid = uuid_s
+            )
+            """
+            cache.add(code, order.uuid, 86400)
+            response = {
+                "code": code
+            }
+            return Response(response)
+        else:
+            return Response("No stock for that pack")
     
 @api_view(['POST'])
 def clientsRate(request):
     uuid_v = Auth_Middleware(request)
-    data = request.data
-    user = Clients.objects.get(uuid=uuid_v)
-    try:
-        store =  Stores.objects.get(name = data["store"])
-        print(store.name)
-        order_count =  Orders.objects.filter(
-            client_uuid = user,
-            store_uuid = store,
-            status = "completed"
-        ).count()
-        print("cont")
-        print(order_count)
-        if order_count > 0:
-            Ratings.objects.update_or_create(
+    if uuid_v is None:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        data = request.data
+        user = Clients.objects.get(uuid=uuid_v)
+        try:
+            store =  Stores.objects.get(name = data["store"])
+            print(store.name)
+            order_count =  Orders.objects.filter(
                 client_uuid = user,
                 store_uuid = store,
-                rating = data["rating"]
-            )
-            rate = Ratings.objects.filter(store_uuid = store).aggregate(Avg('rating'))
-            store.rating = rate['rating__avg']
-            store.save()
+                status = "completed"
+            ).count()
+            print("cont")
+            print(order_count)
+            if order_count > 0:
+                Ratings.objects.update_or_create(
+                    client_uuid = user,
+                    store_uuid = store,
+                    rating = data["rating"]
+                )
+                rate = Ratings.objects.filter(store_uuid = store).aggregate(Avg('rating'))
+                store.rating = rate['rating__avg']
+                store.save()
 
-            return Response("Store rating created/updated successfully",status= status.HTTP_200_OK)
-        
-        else:
-            return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
-    except:
-        return Response("Store not found",status= status.HTTP_401_UNAUTHORIZED)
+                return Response("Store rating created/updated successfully",status= status.HTTP_200_OK)
+            
+            else:
+                return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response("Store not found",status= status.HTTP_401_UNAUTHORIZED)
 
 # Everyone
 @api_view(['POST'])
@@ -412,6 +446,7 @@ def imagesPack(request, uuid):
         image_json = {
             "image": image
         }
+        print(image)
         return Response(image_json)
     
 @api_view(['GET'])
@@ -420,13 +455,14 @@ def imagesStores(request, uuid):
     if uuid_v is None:
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else:
-        pack = Stores.objects.get(uuid = uuid)
+        store = Stores.objects.get(uuid = uuid)
 
-        image = pack.image_bytes
+        image = store.image_bytes
 
         image_json = {
             "image": image
         }
+        print(image)
         return Response(image_json)
     
 @api_view(['GET'])
