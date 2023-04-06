@@ -143,21 +143,18 @@ def storesPacksID(request, uuid):
 
 @api_view(['POST'])
 def storesCompleteOrder(request, code):
+    uuid_v = Auth_Middleware(request)
     try:
         uuid_o_v = cache.get(code)
         order = Orders.objects.get(uuid = uuid_o_v)
-        order.status = "Completed"
+        order.status = "completed"
+        print("hola")
         order.save()
         
         return Response("Order completed",status= status.HTTP_200_OK) 
     
     except:
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
-
-
-
-
-
 
 #Clients methods
 @api_view(['PUT'])
@@ -269,21 +266,22 @@ def clientsRate(request):
     user = Clients.objects.get(uuid=uuid_v)
     try:
         store =  Stores.objects.get(name = data["store"])
-        
-        order_count =  Orders.objects.count(
+        print(store.name)
+        order_count =  Orders.objects.filter(
             client_uuid = user,
             store_uuid = store,
-            status = "Completed"
-        )
+            status = "completed"
+        ).count()
+        print("cont")
+        print(order_count)
         if order_count > 0:
             Ratings.objects.update_or_create(
                 client_uuid = user,
                 store_uuid = store,
                 rating = data["rating"]
             )
-            
             rate = Ratings.objects.filter(store_uuid = store).aggregate(Avg('rating'))
-            store.rating = rate
+            store.rating = rate['rating__avg']
             store.save()
 
             return Response("Store rating created/updated successfully",status= status.HTTP_200_OK)
