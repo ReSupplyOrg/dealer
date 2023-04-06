@@ -143,7 +143,17 @@ def storesPacksID(request, uuid):
 
 @api_view(['POST'])
 def storesCompleteOrder(request, code):
-    data = request.data
+    try:
+        uuid_o_v = cache.get(code)
+        order = Orders.objects.get(uuid = uuid_o_v)
+        order.status = "Completed"
+        order.save()
+        
+        return Response("Order completed",status= status.HTTP_200_OK) 
+    
+    except:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+
 
 
 
