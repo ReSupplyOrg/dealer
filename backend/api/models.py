@@ -41,6 +41,8 @@ class Stores(models.Model):
     username = models.TextField()
     password_salt =  models.BinaryField()
     password_hash = models.BinaryField()
+    latitude = models.FloatField(null = True)
+    longitude = models.FloatField(null = True)
 
     def __str__(self):
         return '{} {} {} {} {} {}'.format(self.uuid, self.phone, self.username, self.name, self.address, self.password_hash)

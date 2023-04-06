@@ -12,6 +12,7 @@ urlpatterns = [
     path('stores/packs/',views.storesPacks, name="stores_packs"),
     path('stores/packs/<uuid>',views.storesPacksID, name="stores_packs_id"),
     path('stores/complete/order/<code>',views.storesCompleteOrder, name="stores_complete_order"),
+    path('stores/location/',views.storeLocation, name="store_location"),
     
     #clients urls
     path('clients/register/', views.clientsRegister, name="clients_register"),

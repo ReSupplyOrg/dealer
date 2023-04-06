@@ -155,6 +155,20 @@ def storesCompleteOrder(request, code):
     
     except:
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    
+@api_view(['PUT'])
+def storeLocation(request):
+    uuid_v = Auth_Middleware(request)
+    data = request.data
+    try:
+        store = Stores.objects.get(uuid = uuid_v)
+        store.latitude = data["latitude"]
+        store.longitude = data["longitude"]
+        store.save()
+        
+        return Response("Location added succesfully",status= status.HTTP_200_OK) 
+    except:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
 
 #Clients methods
 @api_view(['PUT'])
