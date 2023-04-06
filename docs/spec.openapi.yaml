@@ -307,7 +307,28 @@ paths:
           description: Pack updated
         "401":
           description: Unauthorized
-
+  /stores/location:
+    put:
+      description: Set the location of the store based on coordinates
+      security:
+        - sessionHeader: []
+      tags:
+        - Stores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+      responses:
+        "200":
+          description: New location set for store
+        "401":
+          description: Unauthorized
   # Everyone
   /orders/{uuid}:
     delete:
@@ -573,6 +594,10 @@ components:
     store:
       type: object
       properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
         name:
           type: string
         confirmed:
