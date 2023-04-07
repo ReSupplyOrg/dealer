@@ -72,7 +72,7 @@ class Packs(models.Model):
     creation = models.DateTimeField(auto_now_add=True)
     modification = models.DateTimeField(auto_now=True)
     deletion = models.DateTimeField(auto_now=True)
-    image_bytes = models.BinaryField(null=True)
+    image_bytes = models.ImageField(null=True)
     owner = models.ForeignKey(Stores, on_delete=models.CASCADE)
     stock = models.PositiveIntegerField()
     price = models.PositiveIntegerField()

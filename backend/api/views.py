@@ -173,7 +173,6 @@ def storesCompleteOrder(request, code):
             uuid_o_v = cache.get(code)
             order = Orders.objects.get(uuid = uuid_o_v)
             order.status = "completed"
-            print("hola")
             order.save()
             
             return Response("Order completed",status= status.HTTP_200_OK) 
@@ -440,14 +439,16 @@ def imagesPack(request, uuid):
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else:
         pack = Packs.objects.get(uuid = uuid)
-
+ 
+        if pack.image_bytes == "":
+            return Response("Image not found",status= status.HTTP_404_NOT_FOUND)
         image = pack.image_bytes
-
         image_json = {
             "image": image
         }
-        print(image)
+
         return Response(image_json)
+
     
 @api_view(['GET'])
 def imagesStores(request, uuid):
@@ -456,13 +457,13 @@ def imagesStores(request, uuid):
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else:
         store = Stores.objects.get(uuid = uuid)
-
+        if store.image_bytes == "":
+            return Response("Image not found",status= status.HTTP_404_NOT_FOUND)
         image = store.image_bytes
 
         image_json = {
             "image": image
         }
-        print(image)
         return Response(image_json)
     
 @api_view(['GET'])
@@ -471,14 +472,17 @@ def imagesClients(request, uuid):
     if uuid_v is None:
         return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
     else:
-        pack = Clients.objects.get(uuid = uuid)
 
-        image = pack.image_bytes
+        client = Clients.objects.get(uuid = uuid)
+        if client.image_bytes == "":
+            return Response("Image not found",status= status.HTTP_404_NOT_FOUND)
+        image = client.image_bytes
 
         image_json = {
             "image": image
         }
         return Response(image_json)
+
     
 @api_view(['DELETE'])
 def deleteOrder(request, uuid):

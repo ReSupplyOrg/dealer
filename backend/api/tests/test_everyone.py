@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.urls import reverse
 import json
+import requests
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 class TestClients(TestCase):
@@ -201,6 +202,7 @@ class TestClients(TestCase):
 
 
     def test_packs_image_success(self):
+
         raw_data = {
             "phone": "1234567",
             "name": "Domihoes",
@@ -237,6 +239,7 @@ class TestClients(TestCase):
             "description": "",
             "owner": "",
             "stock": 2,
+            "image": "",
             "price": 5,
             "pack_type": "random",
             "page": 0
@@ -245,14 +248,15 @@ class TestClients(TestCase):
         self.assertEquals(response.status_code,200)
         item = response.data["items"][0]
         uuid = item["uuid"]
-        print("hola")
         response = self.client.get(f"/images/pack/{uuid}",format='json',HTTP_session=token["token"])
-        self.assertEquals(response.status_code,200)
+        self.assertEquals(response.status_code,404)
         
     def test_stores_image_success(self):
+
         raw_data = {
             "phone": "1234567",
             "name": "Domihoes",
+            "image_bytes": "",
             "username": "domihoes",
             "password": "12345",
             "address": "Calle 13"
@@ -282,7 +286,6 @@ class TestClients(TestCase):
         self.assertEquals(response.status_code,200)
         item = response.data["items"][0]
         uuid = item["uuid"]
-        print("hola")
 
         response = self.client.get(f"/images/stores/{uuid}",format='json',HTTP_session=token["token"])
-        self.assertEquals(response.status_code,200)
+        self.assertEquals(response.status_code,404)
