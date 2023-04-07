@@ -270,7 +270,6 @@ def clientsAccount(request):
 def clientsBuy(request):
     uuid_v = Auth_Middleware(request)
     if uuid_v is None:
-        print("hola")
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
     else:
         user = Clients.objects.get(uuid=uuid_v)
@@ -314,14 +313,12 @@ def clientsRate(request):
         user = Clients.objects.get(uuid=uuid_v)
         try:
             store =  Stores.objects.get(name = data["store"])
-            print(store.name)
+
             order_count =  Orders.objects.filter(
                 client_uuid = user,
                 store_uuid = store,
                 status = "completed"
             ).count()
-            print("cont")
-            print(order_count)
             if order_count > 0:
                 Ratings.objects.update_or_create(
                     client_uuid = user,

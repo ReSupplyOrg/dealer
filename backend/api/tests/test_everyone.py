@@ -14,12 +14,13 @@ class TestClients(TestCase):
         self.stores_login_url = reverse("stores_login")
         self.seach_stores_url = reverse("search_stores")
         self.stores_pack_url = reverse("stores_packs")
-        #self.stores_pack_patch_url = reverse("stores_packs_id")
+
         self.search_orders_url = reverse("search_orders")
         self.search_packs_url = reverse("search_packs")
 
         self.clients_register_url = reverse("clients_register")
         self.clients_login_url = reverse("clients_login")
+        self.clients_buy_url = reverse("clients_buy")
 
     def test_search_stores_success(self):
         raw_data = {
@@ -366,6 +367,84 @@ class TestClients(TestCase):
             "uuid": uuid
         }
         self.client2.credentials(session=token["token"])
-        response = self.client2.post("/clients/buy/",format='json',data=raw_data,HTTP_session=token["token"])
+        response = self.client2.post(self.clients_buy_url,format='json',data=raw_data,HTTP_session=token["token"])
         self.assertEquals(response.status_code,200)
-        
+
+    def test_complete_order_success(self):
+
+        raw_data = {
+            "phone": "1234567",
+            "name": "Domihoes",
+            "image": "",
+            "username": "domihoes",
+            "password": "12345",
+            "address": "Calle 13"
+        }
+        response = self.client.put(self.stores_register_url,format='json',data=raw_data)
+
+        self.assertEquals(response.status_code,200)
+
+        raw_data = {
+            "username": "domihoes",
+            "password": "12345",
+        }
+        response = self.client.post(self.stores_login_url,format='json',data=raw_data)
+        self.assertEquals(response.status_code,200)
+        token = json.loads(response.content.decode('utf-8'))
+        raw_data = {
+            "name": "comidasobra",
+            "description": "Un perro, una hamburguesa",
+            "stock": 2,
+            "price": 5,
+            "type": "random"
+        }
+        self.client.credentials(session=token["token"])
+        response = self.client.put(self.stores_pack_url,format='json',data=raw_data,HTTP_session=token["token"])
+        self.assertEquals(response.status_code,200)
+
+        raw_data = {
+            "name": "",
+            "description": "",
+            "owner": "",
+            "stock": 2,
+            "image": "",
+            "price": 5,
+            "pack_type": "random",
+            "page": 0
+        }
+        response = self.client.post(self.search_packs_url,format='json',data=raw_data,HTTP_session=token["token"])
+        self.assertEquals(response.status_code,200)
+        item = response.data["items"][0]
+        uuid = item["uuid"]
+
+        raw_data = {
+            "phone": "1234567",
+            "names": "juan perez",
+            "image": "",
+            "username": "juanpaez12",
+            "password": "12345",
+            "address": "Calle 13"
+        }
+        response = self.client2.put(self.clients_register_url,format='json',data=raw_data)
+
+        self.assertEquals(response.status_code,200)
+
+        raw_data = {
+            "username": "juanpaez12",
+            "password": "12345",
+        }
+        response = self.client2.post(self.clients_login_url,format='json',data=raw_data)
+        self.assertEquals(response.status_code,200)
+        token = json.loads(response.content.decode('utf-8'))
+
+        raw_data = {
+            "uuid": uuid
+        }
+        self.client2.credentials(session=token["token"])
+        response = self.client2.post(self.clients_buy_url,format='json',data=raw_data,HTTP_session=token["token"])
+        self.assertEquals(response.status_code,200)
+
+        code = response.data["code"]
+
+        response = self.client.post(f"/stores/complete/order/{code}",format='json',data=raw_data,HTTP_session=token["token"])
+        self.assertEquals(response.status_code,200)
