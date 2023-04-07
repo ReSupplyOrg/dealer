@@ -25,15 +25,15 @@ class TestStores(TestCase):
 
         self.assertEquals(response.status_code,200)
 
-        raw_data2 = {
+        raw_data = {
             "username": "domihoes",
             "password": "12345",
         }
-        response = self.client.post(self.stores_login_url,format='json',data=raw_data2)
+        response = self.client.post(self.stores_login_url,format='json',data=raw_data)
         self.assertEquals(response.status_code,200)
 
         token = json.loads(response.content.decode('utf-8'))
-        raw_data3 = {
+        raw_data = {
             "name": "comidasobra",
             "description": "Un perro, una hamburguesa",
             "stock": 2,
@@ -41,7 +41,7 @@ class TestStores(TestCase):
             "type": "random"
         }
         self.client.credentials(session=token["token"])
-        response = self.client.put(self.stores_pack_url,format='json',data=raw_data3,HTTP_session=token["token"])
+        response = self.client.put(self.stores_pack_url,format='json',data=raw_data,HTTP_session=token["token"])
         self.assertEquals(response.status_code,200)
 
     def test_stores_register_login_account_success(self):
@@ -57,15 +57,15 @@ class TestStores(TestCase):
 
         self.assertEquals(response.status_code,200)
 
-        raw_data2 = {
+        raw_data = {
             "username": "domihoes",
             "password": "12345",
         }
-        response = self.client.post(self.stores_login_url,format='json',data=raw_data2)
+        response = self.client.post(self.stores_login_url,format='json',data=raw_data)
         self.assertEquals(response.status_code,200)
 
         token = json.loads(response.content.decode('utf-8'))
-        raw_data3 = {
+        raw_data = {
             "phone": "1234567",
             "name": "Dominoes",
             "image": "",
@@ -73,7 +73,7 @@ class TestStores(TestCase):
             "address": "Calle 13"
         }
         self.client.credentials(session=token["token"])
-        response = self.client.patch(self.stores_account_url,format='json',data=raw_data3,HTTP_session=token["token"])
+        response = self.client.patch(self.stores_account_url,format='json',data=raw_data,HTTP_session=token["token"])
         self.assertEquals(response.status_code,200)
 
     def test_stores_register_login_bad_username(self):
@@ -89,11 +89,11 @@ class TestStores(TestCase):
 
             self.assertEquals(response.status_code,200)
 
-            raw_data2 = {
+            raw_data = {
                 "username": "dominoes",
                 "password": "12345",
             }
-            response = self.client.post(self.stores_login_url,format='json',data=raw_data2)
+            response = self.client.post(self.stores_login_url,format='json',data=raw_data)
             self.assertEquals(response.status_code,401)
 
     def test_stores_register_login_bad_password(self):
@@ -109,11 +109,11 @@ class TestStores(TestCase):
 
             self.assertEquals(response.status_code,200)
 
-            raw_data2 = {
+            raw_data = {
                 "username": "domihoes",
                 "password": "123456",
             }
-            response = self.client.post(self.stores_login_url,format='json',data=raw_data2)
+            response = self.client.post(self.stores_login_url,format='json',data=raw_data)
             self.assertEquals(response.status_code,401)
 
     def test_stores_register_login_account_bad_token(self):
@@ -129,15 +129,15 @@ class TestStores(TestCase):
 
         self.assertEquals(response.status_code,200)
 
-        raw_data2 = {
+        raw_data = {
             "username": "domihoes",
             "password": "12345",
         }
-        response = self.client.post(self.stores_login_url,format='json',data=raw_data2)
+        response = self.client.post(self.stores_login_url,format='json',data=raw_data)
         self.assertEquals(response.status_code,200)
 
         token = "bad_token"
-        raw_data3 = {
+        raw_data = {
             "phone": "1234567",
             "name": "Dominoes",
             "image": "",
@@ -145,5 +145,5 @@ class TestStores(TestCase):
             "address": "Calle 13"
         }
         self.client.credentials(session=token)
-        response = self.client.patch(self.stores_account_url,format='json',data=raw_data3,HTTP_session=token)
+        response = self.client.patch(self.stores_account_url,format='json',data=raw_data,HTTP_session=token)
         self.assertEquals(response.status_code,401)

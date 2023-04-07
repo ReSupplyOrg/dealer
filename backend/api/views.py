@@ -270,6 +270,7 @@ def clientsAccount(request):
 def clientsBuy(request):
     uuid_v = Auth_Middleware(request)
     if uuid_v is None:
+        print("hola")
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
     else:
         user = Clients.objects.get(uuid=uuid_v)
