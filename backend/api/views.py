@@ -8,10 +8,11 @@ from django.core.cache import cache
 from .middleware import Auth_Middleware, Is_Store_Middleware
 from django.core.paginator import Paginator
 from django.db.models import Avg
+import requests
+import bcrypt, secrets, os
 
-#from django.core.cache.backends.redis import RedisCache
-
-import bcrypt, secrets
+MESSAGING_API_BASE_URL = os.environ.get("MESSAGING_API_BASE_URL")
+MESSAGING_API_KEY = os.environ.get("MESSAGING_API_KEY")
 
 @api_view(["GET"])
 def echo(request):
@@ -197,6 +198,45 @@ def storeLocation(request):
         except:
             return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
 
+@api_view(['POST'])
+def storesConfirmPhone(request):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    
+    code = secrets.token_hex(4)
+    cache.add(code, uuid_v, 3600)
+    requests.post(
+        f"{MESSAGING_API_BASE_URL}/api/sms", 
+        json={
+        "recipient": "573012545954",
+        "subject": "Confirmation code",
+        "body": code
+        }, 
+        headers={"Content-Type": "application/json", 
+        "X-API-Key": MESSAGING_API_KEY})
+    
+    return Response("Confirm code sent",status= status.HTTP_200_OK)
+
+@api_view(['PUT'])
+def storesConfirmPhoneCode(request, code):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+
+    uuid = cache.get(code)
+    
+    if uuid_v != uuid:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    
+    cache.delete(code)
+    
+    store = Stores.objects.get(uuid = uuid_v)
+    store.confirmed = True
+    store.save()
+
+    return Response("Account confirmed",status= status.HTTP_200_OK)
+
 #Clients methods
 @api_view(['PUT'])
 def clientsRegister(request):
@@ -335,6 +375,45 @@ def clientsRate(request):
                 return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
         except:
             return Response("Store not found",status= status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['POST'])
+def clientsConfirmPhone(request):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    
+    code = secrets.token_hex(4)
+    cache.add(code, uuid_v, 3600)
+    requests.post(
+        f"{MESSAGING_API_BASE_URL}/api/sms", 
+        json={
+        "recipient": "573012545954",
+        "subject": "Confirmation code",
+        "body": code
+        }, 
+        headers={"Content-Type": "application/json", 
+        "X-API-Key": MESSAGING_API_KEY})
+
+    return Response("Confirm code sent",status= status.HTTP_200_OK)
+
+@api_view(['PUT'])
+def clientsConfirmPhoneCode(request, code):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+
+    uuid = cache.get(code)
+    
+    if uuid_v != uuid:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    
+    cache.delete(code)
+    
+    client = Clients.objects.get(uuid = uuid_v)
+    client.confirmed = True
+    client.save()
+
+    return Response("Account confirmed",status= status.HTTP_200_OK)
 
 # Everyone
 @api_view(['POST'])
