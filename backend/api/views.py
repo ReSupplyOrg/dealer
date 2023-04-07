@@ -200,6 +200,7 @@ def storeLocation(request):
 
 @api_view(['POST'])
 def storesConfirmPhone(request):
+    uuid_v = Auth_Middleware(request)
     if uuid_v is None:
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
     
@@ -207,8 +208,8 @@ def storesConfirmPhone(request):
     cache.add(code, uuid_v, 3600)
     requests.post(
         f"{MESSAGING_API_BASE_URL}/api/sms", 
-        data={
-        "recipient": "573202086785",
+        json={
+        "recipient": "573012545954",
         "subject": "Confirmation code",
         "body": code
         }, 
@@ -219,6 +220,7 @@ def storesConfirmPhone(request):
 
 @api_view(['PUT'])
 def storesConfirmPhoneCode(request, code):
+    uuid_v = Auth_Middleware(request)
     if uuid_v is None:
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
 
@@ -376,6 +378,7 @@ def clientsRate(request):
 
 @api_view(['POST'])
 def clientsConfirmPhone(request):
+    uuid_v = Auth_Middleware(request)
     if uuid_v is None:
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
     
@@ -383,18 +386,19 @@ def clientsConfirmPhone(request):
     cache.add(code, uuid_v, 3600)
     requests.post(
         f"{MESSAGING_API_BASE_URL}/api/sms", 
-        data={
-        "recipient": "573202086785",
+        json={
+        "recipient": "573012545954",
         "subject": "Confirmation code",
         "body": code
         }, 
         headers={"Content-Type": "application/json", 
         "X-API-Key": MESSAGING_API_KEY})
-    
+
     return Response("Confirm code sent",status= status.HTTP_200_OK)
 
 @api_view(['PUT'])
 def clientsConfirmPhoneCode(request, code):
+    uuid_v = Auth_Middleware(request)
     if uuid_v is None:
         return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
 
