@@ -496,3 +496,21 @@ def deleteOrder(request, uuid):
             return Response("Order canceled succesfully")
         except:
             return Response("Order not found",status= status.HTTP_404_NOT_FOUND )
+
+@api_view(['GET'])
+def queryRating(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        try:
+            store = Stores.objects.get(uuid = uuid)
+            rating = store.rating
+
+            response_rating = {
+                "rating": rating
+            }
+
+            return Response(response_rating)
+        except:
+            return Response("Store not found",status= status.HTTP_404_NOT_FOUND )
