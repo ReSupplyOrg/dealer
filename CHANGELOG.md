@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.15 (2023-04-07)
+
+
+### Bug Fixes
+
+* added requests to the dependencies ([4f0c065](https://github.com/ReSupplyOrg/dealer/commit/4f0c06510c3079f7c3ec2074044b59c4312b6f82))
+
 ### 0.0.14 (2023-02-19)
 
 
