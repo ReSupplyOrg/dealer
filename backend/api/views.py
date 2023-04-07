@@ -374,6 +374,43 @@ def clientsRate(request):
         except:
             return Response("Store not found",status= status.HTTP_401_UNAUTHORIZED)
 
+@api_view(['POST'])
+def clientsConfirmPhone(request):
+    if uuid_v is None:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    
+    code = secrets.token_hex(4)
+    cache.add(code, uuid_v, 3600)
+    requests.post(
+        f"{MESSAGING_API_BASE_URL}/api/sms", 
+        data={
+        "recipient": "573202086785",
+        "subject": "Confirmation code",
+        "body": code
+        }, 
+        headers={"Content-Type": "application/json", 
+        "X-API-Key": MESSAGING_API_KEY})
+    
+    return Response("Confirm code sent",status= status.HTTP_200_OK)
+
+@api_view(['PUT'])
+def clientsConfirmPhoneCode(request, code):
+    if uuid_v is None:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+
+    uuid = cache.get(code)
+    
+    if uuid_v != uuid:
+        return Response("Unauthorized",status= status.HTTP_401_UNAUTHORIZED)
+    
+    cache.delete(code)
+    
+    client = Clients.objects.get(uuid = uuid_v)
+    client.confirmed = True
+    client.save()
+
+    return Response("Account confirmed",status= status.HTTP_200_OK)
+
 # Everyone
 @api_view(['POST'])
 def searchStores(request):

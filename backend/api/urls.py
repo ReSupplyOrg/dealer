@@ -22,7 +22,8 @@ urlpatterns = [
     path('clients/account/',views.clientsAccount, name="clients_account"),
     path('clients/buy/',views.clientsBuy, name="clients_buy"),
     path('clients/rate/',views.clientsRate, name="clients_rate"),
-    
+    path('clients/confirm/phone',views.clientsConfirmPhone, name="clients_confirm_phone"),
+    path('clients/confirm/phone/<code>',views.clientsConfirmPhoneCode, name="clients_confirm_phone_code"),
 
     #everyone urls
     path('search/stores/', views.searchStores, name="search_stores"),
