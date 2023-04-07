@@ -13,6 +13,8 @@ urlpatterns = [
     path('stores/packs/<uuid>',views.storesPacksID, name="stores_packs_id"),
     path('stores/complete/order/<code>',views.storesCompleteOrder, name="stores_complete_order"),
     path('stores/location/',views.storeLocation, name="store_location"),
+    path('stores/confirm/phone',views.storesConfirmPhone, name="store_confirm_phone"),
+    path('stores/confirm/phone/<code>',views.storesConfirmPhoneCode, name="store_confirm_phone_code"),
     
     #clients urls
     path('clients/register/', views.clientsRegister, name="clients_register"),
