@@ -9,17 +9,17 @@ class StoreSerializer(ModelSerializer):
 class SearchStoreSerializer(ModelSerializer):
     class Meta:
         model = Stores
-        fields = ['name','confirmed','phone','rating','address','username']
+        fields = ['uuid','name','confirmed','phone','rating','address','username']
 
 class SearchPackSerializer(ModelSerializer):
     class Meta:
         model = Packs
-        fields = ['name','description','owner','stock','price','pack_type']
+        fields = ['uuid','name','description','owner','stock','price','pack_type']
 
 class SearchOrderSerializer(ModelSerializer):
     class Meta:
         model = Orders
-        fields = ['client_uuid','store_uuid','pack_uuid','payed_price']
+        fields = ['uuid','client_uuid','store_uuid','pack_uuid','payed_price']
 
 class ClientSerializer(ModelSerializer):
     class Meta:
