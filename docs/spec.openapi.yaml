@@ -558,6 +558,52 @@ paths:
                 $ref: "#/components/schemas/store-account"
         "401":
           description: Unauthorized
+  /details/clients/{uuid}:
+    get:
+      description: Query the details of a client account
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Client account details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        "401":
+          description: Unauthorized
+  /details/packs/{uuid}:
+    get:
+      description: Query the details of a pack
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Pack details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pack"
+        "401":
+          description: Unauthorized
 components:
   securitySchemes:
     sessionHeader:
