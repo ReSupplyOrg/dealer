@@ -535,6 +535,29 @@ paths:
           description: Image Bytes
         "401":
           description: Unauthorized
+  /details/stores/{uuid}:
+    get:
+      description: Query the details of an store account
+      security:
+        - sessionHeader: []
+      tags:
+        - Everyone
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Store account details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/store-account"
+        "401":
+          description: Unauthorized
 components:
   securitySchemes:
     sessionHeader:
