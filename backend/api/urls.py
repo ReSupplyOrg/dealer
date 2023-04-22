@@ -34,5 +34,8 @@ urlpatterns = [
     path('images/clients/<uuid>', views.imagesClients, name="images_clients"),
     path('orders/<uuid>', views.deleteOrder, name = "delete_order"),
     path('rating/<uuid>', views.queryRating, name = "query_rating"),
+    path('details/stores/<uuid>', views.detailStores, name = "detail_stores"),
+    path('details/clients/<uuid>', views.detailClients, name = "detail_clients"),
+    path('details/packs/<uuid>', views.detailPacks, name = "detail_packs"),
 
 ]

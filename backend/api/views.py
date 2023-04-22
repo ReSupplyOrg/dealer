@@ -593,3 +593,36 @@ def queryRating(request, uuid):
             return Response(response_rating)
         except:
             return Response("Store not found",status= status.HTTP_404_NOT_FOUND )
+        
+@api_view(['GET'])
+def detailStores(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        store = Stores.objects.get(uuid = uuid)
+        serializer = StoreSerializer(store, many = False)
+
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def detailClients(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        store = Clients.objects.get(uuid = uuid)
+        serializer = ClientSerializer(store, many = False)
+        
+        return Response(serializer.data)
+    
+@api_view(['GET'])
+def detailPacks(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        store = Packs.objects.get(uuid = uuid)
+        serializer = SearchPackSerializer(store, many = False)
+        
+        return Response(serializer.data)
