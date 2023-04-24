@@ -11,6 +11,7 @@ from django.db.models import Avg
 import requests
 import bcrypt, secrets, os
 import base64
+from django.http import HttpResponse
 
 MESSAGING_API_BASE_URL = os.environ.get("MESSAGING_API_BASE_URL")
 MESSAGING_API_KEY = os.environ.get("MESSAGING_API_KEY")
@@ -29,6 +30,7 @@ def storesRegister(request):
 
     bytes = data["password"].encode('utf-8')
     hash = bcrypt.hashpw(bytes, salt)
+    #print(base64.b64decode(data["image"]))
     if "image" in data and data["image"]:
         Stores.objects.create(
             phone = data["phone"],
@@ -246,7 +248,7 @@ def clientsRegister(request):
     bytes = data["password"].encode('utf-8')
 
     hash = bcrypt.hashpw(bytes, salt)
-
+    
     Clients.objects.create(
         phone = data["phone"],
         image_bytes = base64.b64decode(data["image"]),
@@ -520,12 +522,10 @@ def imagesPack(request, uuid):
  
         if pack.image_bytes == "":
             return Response("Image not found",status= status.HTTP_404_NOT_FOUND)
+        
         image = pack.image_bytes
-        image_json = {
-            "image": image
-        }
 
-        return Response(image_json)
+        return HttpResponse(image,content_type='image/png')
 
     
 @api_view(['GET'])
@@ -537,12 +537,10 @@ def imagesStores(request, uuid):
         store = Stores.objects.get(uuid = uuid)
         if store.image_bytes == "":
             return Response("Image not found",status= status.HTTP_404_NOT_FOUND)
+        
         image = store.image_bytes
-
-        image_json = {
-            "image": image
-        }
-        return Response(image_json)
+        
+        return HttpResponse(image,content_type='image/png')
     
 @api_view(['GET'])
 def imagesClients(request, uuid):
@@ -554,12 +552,10 @@ def imagesClients(request, uuid):
         client = Clients.objects.get(uuid = uuid)
         if client.image_bytes == "":
             return Response("Image not found",status= status.HTTP_404_NOT_FOUND)
+        
         image = client.image_bytes
 
-        image_json = {
-            "image": image
-        }
-        return Response(image_json)
+        return HttpResponse(image,content_type='image/png')
 
     
 @api_view(['DELETE'])
