@@ -4,7 +4,8 @@ from django.urls import reverse
 import json
 import requests
 from django.core.files.uploadedfile import SimpleUploadedFile
-
+import base64
+import os
 class TestClients(TestCase):
     
     def setUp(self):
@@ -23,6 +24,12 @@ class TestClients(TestCase):
         self.clients_login_url = reverse("clients_login")
         self.clients_buy_url = reverse("clients_buy")
         self.clients_rate_url = reverse("clients_rate")
+
+        image_path = os.path.join(os.path.dirname(__file__), 'test.png')
+        with open(image_path, 'rb') as f:
+            image_content = f.read()
+
+        self.image_base64 = base64.b64encode(image_content)
 
     def test_search_stores_success(self):
         raw_data = {
@@ -263,7 +270,7 @@ class TestClients(TestCase):
         raw_data = {
             "phone": "1234567",
             "name": "Domihoes",
-            "image_bytes": "",
+            "image": self.image_base64,
             "username": "domihoes",
             "password": "12345",
             "address": "Calle 13"
@@ -295,7 +302,7 @@ class TestClients(TestCase):
         uuid = item["uuid"]
 
         response = self.client.get(f"/images/stores/{uuid}",format='json',HTTP_session=token["token"])
-        self.assertEquals(response.status_code,404)
+        self.assertEquals(response.status_code,200)
 
 
     def test_buy_success(self):

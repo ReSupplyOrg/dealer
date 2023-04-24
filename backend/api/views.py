@@ -10,6 +10,8 @@ from django.core.paginator import Paginator
 from django.db.models import Avg
 import requests
 import bcrypt, secrets, os
+import base64
+from django.http import HttpResponse
 
 MESSAGING_API_BASE_URL = os.environ.get("MESSAGING_API_BASE_URL")
 MESSAGING_API_KEY = os.environ.get("MESSAGING_API_KEY")
@@ -28,10 +30,11 @@ def storesRegister(request):
 
     bytes = data["password"].encode('utf-8')
     hash = bcrypt.hashpw(bytes, salt)
+    #print(base64.b64decode(data["image"]))
     if "image" in data and data["image"]:
         Stores.objects.create(
             phone = data["phone"],
-            image_bytes = data["image"],
+            image_bytes = base64.b64decode(data["image"]),
             name = data["name"],
             username = data["username"],
             password_hash = hash,
@@ -92,7 +95,7 @@ def storesAccount(request):
             if(name_v != ""):
                 user.name = name_v
             if(image != ""): 
-                user.image_bytes = image
+                user.image_bytes = base64.b64decode(image)
             if(bytes_v != ""):
                 salt = bytes(user.password_salt)
                 user.password_hash = bcrypt.hashpw(bytes_v, salt)
@@ -245,10 +248,10 @@ def clientsRegister(request):
     bytes = data["password"].encode('utf-8')
 
     hash = bcrypt.hashpw(bytes, salt)
-
+    
     Clients.objects.create(
         phone = data["phone"],
-        image_bytes = data["image"],
+        image_bytes = base64.b64decode(data["image"]),
         names = data["names"],
         username = data["username"],
         password_hash = hash,
@@ -299,7 +302,7 @@ def clientsAccount(request):
             if(names_v != ""):
                 user.names = names_v
             if(image != ""): 
-                user.image_bytes = image
+                user.image_bytes = base64.b64decode(image)
             if(bytes_v != ""):
                 salt = bytes(user.password_salt)
                 user.password_hash = bcrypt.hashpw(bytes_v, salt)
@@ -519,12 +522,10 @@ def imagesPack(request, uuid):
  
         if pack.image_bytes == "":
             return Response("Image not found",status= status.HTTP_404_NOT_FOUND)
+        
         image = pack.image_bytes
-        image_json = {
-            "image": image
-        }
 
-        return Response(image_json)
+        return HttpResponse(image,content_type='image/png')
 
     
 @api_view(['GET'])
@@ -536,12 +537,10 @@ def imagesStores(request, uuid):
         store = Stores.objects.get(uuid = uuid)
         if store.image_bytes == "":
             return Response("Image not found",status= status.HTTP_404_NOT_FOUND)
+        
         image = store.image_bytes
-
-        image_json = {
-            "image": image
-        }
-        return Response(image_json)
+        
+        return HttpResponse(image,content_type='image/png')
     
 @api_view(['GET'])
 def imagesClients(request, uuid):
@@ -553,12 +552,10 @@ def imagesClients(request, uuid):
         client = Clients.objects.get(uuid = uuid)
         if client.image_bytes == "":
             return Response("Image not found",status= status.HTTP_404_NOT_FOUND)
+        
         image = client.image_bytes
 
-        image_json = {
-            "image": image
-        }
-        return Response(image_json)
+        return HttpResponse(image,content_type='image/png')
 
     
 @api_view(['DELETE'])
@@ -593,3 +590,36 @@ def queryRating(request, uuid):
             return Response(response_rating)
         except:
             return Response("Store not found",status= status.HTTP_404_NOT_FOUND )
+        
+@api_view(['GET'])
+def detailStores(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        store = Stores.objects.get(uuid = uuid)
+        serializer = StoreSerializer(store, many = False)
+
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def detailClients(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        store = Clients.objects.get(uuid = uuid)
+        serializer = ClientSerializer(store, many = False)
+        
+        return Response(serializer.data)
+    
+@api_view(['GET'])
+def detailPacks(request, uuid):
+    uuid_v = Auth_Middleware(request)
+    if uuid_v is None:
+        return Response("Session not found",status= status.HTTP_401_UNAUTHORIZED)
+    else:
+        store = Packs.objects.get(uuid = uuid)
+        serializer = SearchPackSerializer(store, many = False)
+        
+        return Response(serializer.data)
