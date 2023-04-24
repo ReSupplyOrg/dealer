@@ -93,7 +93,7 @@ def storesAccount(request):
             if(name_v != ""):
                 user.name = name_v
             if(image != ""): 
-                user.image_bytes = image
+                user.image_bytes = base64.b64decode(image)
             if(bytes_v != ""):
                 salt = bytes(user.password_salt)
                 user.password_hash = bcrypt.hashpw(bytes_v, salt)
@@ -300,7 +300,7 @@ def clientsAccount(request):
             if(names_v != ""):
                 user.names = names_v
             if(image != ""): 
-                user.image_bytes = image
+                user.image_bytes = base64.b64decode(image)
             if(bytes_v != ""):
                 salt = bytes(user.password_salt)
                 user.password_hash = bcrypt.hashpw(bytes_v, salt)
