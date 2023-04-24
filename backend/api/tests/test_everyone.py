@@ -302,7 +302,6 @@ class TestClients(TestCase):
         uuid = item["uuid"]
 
         response = self.client.get(f"/images/stores/{uuid}",format='json',HTTP_session=token["token"])
-        print(response.content)
         self.assertEquals(response.status_code,200)
 
 
