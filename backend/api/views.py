@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django.db.models import Avg
 import requests
 import bcrypt, secrets, os
+import base64
 
 MESSAGING_API_BASE_URL = os.environ.get("MESSAGING_API_BASE_URL")
 MESSAGING_API_KEY = os.environ.get("MESSAGING_API_KEY")
@@ -31,7 +32,7 @@ def storesRegister(request):
     if "image" in data and data["image"]:
         Stores.objects.create(
             phone = data["phone"],
-            image_bytes = data["image"],
+            image_bytes = base64.b64decode(data["image"]),
             name = data["name"],
             username = data["username"],
             password_hash = hash,
@@ -248,7 +249,7 @@ def clientsRegister(request):
 
     Clients.objects.create(
         phone = data["phone"],
-        image_bytes = data["image"],
+        image_bytes = base64.b64decode(data["image"]),
         names = data["names"],
         username = data["username"],
         password_hash = hash,

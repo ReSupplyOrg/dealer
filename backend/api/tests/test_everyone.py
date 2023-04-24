@@ -295,7 +295,7 @@ class TestClients(TestCase):
         uuid = item["uuid"]
 
         response = self.client.get(f"/images/stores/{uuid}",format='json',HTTP_session=token["token"])
-        self.assertEquals(response.status_code,404)
+        self.assertEquals(response.status_code,200)
 
 
     def test_buy_success(self):

@@ -2,6 +2,8 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.urls import reverse
 import json
+import base64
+import os
 
 class TestClients(TestCase):
     
@@ -16,11 +18,18 @@ class TestClients(TestCase):
         self.stores_account_url = reverse("stores_account")
         self.stores_pack_url = reverse("stores_packs")
 
+        image_path = os.path.join(os.path.dirname(__file__), 'test.png')
+        with open(image_path, 'rb') as f:
+            image_content = f.read()
+
+        self.image_base64 = base64.b64encode(image_content).decode('utf-8')
+        
+
     def test_clients_buy_success(self):
         raw_data = {
             "phone": "1234567",
             "names": "juan perez",
-            "image": "",
+            "image": self.image_base64,
             "username": "juanpaez12",
             "password": "12345",
             "address": "Calle 13"
