@@ -26,10 +26,15 @@ class TestClients(TestCase):
         self.clients_rate_url = reverse("clients_rate")
 
         image_path = os.path.join(os.path.dirname(__file__), 'test.png')
+        image2_path = os.path.join(os.path.dirname(__file__), 'test2.jpeg')
+
         with open(image_path, 'rb') as f:
             image_content = f.read()
+        with open(image2_path, 'rb') as f:
+            image2_content = f.read()
 
         self.image_base64 = base64.b64encode(image_content)
+        self.image2_base64 = base64.b64encode(image2_content)
 
     def test_search_stores_success(self):
         raw_data = {
@@ -270,7 +275,7 @@ class TestClients(TestCase):
         raw_data = {
             "phone": "1234567",
             "name": "Domihoes",
-            "image": self.image_base64,
+            "image": self.image2_base64,
             "username": "domihoes",
             "password": "12345",
             "address": "Calle 13"

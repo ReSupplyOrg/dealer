@@ -19,10 +19,16 @@ class TestClients(TestCase):
         self.stores_pack_url = reverse("stores_packs")
 
         image_path = os.path.join(os.path.dirname(__file__), 'test.png')
+        image2_path = os.path.join(os.path.dirname(__file__), 'test2.jpeg')
+
         with open(image_path, 'rb') as f:
             image_content = f.read()
+        with open(image2_path, 'rb') as f:
+            image2_content = f.read()
 
         self.image_base64 = base64.b64encode(image_content).decode('utf-8')
+        self.image2_base64 = base64.b64encode(image2_content).decode('utf-8')
+
         
 
     def test_clients_buy_success(self):
@@ -86,7 +92,6 @@ class TestClients(TestCase):
             "image": self.image_base64,
             "username": "juanpaez12",
             "password": "12345",
-            "address": "Calle 13"
         }
         response = self.client.put(self.clients_register_url,format='json',data=raw_data)
 
@@ -103,9 +108,8 @@ class TestClients(TestCase):
         raw_data = {
             "phone": "1234567",
             "names": "juan paez",
-            "image": self.image_base64,
-            "password": "1234567890",
-            "address": "Calle 13"
+            "image": self.image2_base64,
+            "password": "1234567890"
         }
         self.client.credentials(session=token["token"])
         response = self.client.patch(self.clients_account_url,format='json',data=raw_data,HTTP_session=token["token"])
