@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.19 (2023-05-07)
+
+
+### Bug Fixes
+
+* added country extension ([b2beffc](https://github.com/ReSupplyOrg/dealer/commit/b2beffcfdd2e38689c30f438821b38497464a823))
+
 ### 0.0.18 (2023-05-06)
 
 ### 0.0.17 (2023-04-24)
