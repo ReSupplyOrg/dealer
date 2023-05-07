@@ -390,7 +390,7 @@ def clientsConfirmPhone(request):
     requests.post(
         f"{MESSAGING_API_BASE_URL}/api/sms", 
         json={
-        "recipient": "573012545954",
+        "recipient": "+573053670547",
         "subject": "Confirmation code",
         "body": code
         }, 
