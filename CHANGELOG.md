@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.20 (2023-05-07)
+
+
+### Bug Fixes
+
+* added country code to store send SMS number ([f30bb85](https://github.com/ReSupplyOrg/dealer/commit/f30bb85b719be62f32b6482a4b370f2b7b440ccf))
+
 ### 0.0.19 (2023-05-07)
 
 
